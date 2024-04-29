@@ -1,4 +1,4 @@
-# Commanding
+# 命令操作
 
 除了提供对要在视图中显示或编辑的数据的访问之外，ViewModel 还可能定义一个或多个可由用户执行的操作或操作。用户可以通过 UI 执行的操作或操作通常定义为命令。命令提供了一种方便的方式来表示可以轻松绑定到 UI 中的控件的操作或操作。它们封装了实现操作或操作的实际代码，并有助于将其与其在视图中的实际视觉表示形式分离。
 
@@ -38,7 +38,7 @@ public class ArticleViewModel
 
 该 DelegateCommand 类是泛型类型。type 参数指定传递给 Execute and CanExecute 方法的命令参数的类型。在前面的示例中，命令参数的类型 object 为 。Prism 还提供了该 DelegateCommand 类的非泛型版本，供在不需要命令参数时使用，其定义如下：
 
-```
+```cs
 public class ArticleViewModel
 {
     public DelegateCommand SubmitCommand { get; private set; }
@@ -63,18 +63,18 @@ public class ArticleViewModel
 ?>故意 DelegateCommand 阻止使用值类型（int、double、bool 等）。因为 ICommand 需要 object ，所以在命令绑定的 XAML 初始化期间调用 时，具有 的 T 值类型会导致意外行为 CanExecute(null) 。使用 default(T) 被考虑并被拒绝作为解决方案，因为实现者无法区分有效值和默认值。如果希望使用值类型作为参数，则必须使用 DelegateCommand<Nullable<int>> 或速记 ? 语法 （ DelegateCommand<int?> ） 使其可为 null。
 
 # 从视图调用 DelegateCommands
-视图中的控件可以通过多种方式与 ViewModel 提供的命令对象相关联。某些 WPF、Xamarin.Forms 和 UWP 控件可以通过该属性轻松数据绑定到命令对象。Command
+视图中的控件可以通过多种方式与 ViewModel 提供的命令对象相关联。某些 WPF、Xamarin.Forms 和 UWP 控件可以通过 Command 该属性轻松数据绑定到命令对象。
 ```
 <Button Command="{Binding SubmitCommand}" CommandParameter="OrderId"/>
 ```
-还可以选择使用该属性定义命令参数。预期参数的类型在泛型声明中指定。当用户与该控件交互时，该控件将自动调用该命令，并且命令参数（如果提供）将作为参数传递给该命令的方法。在前面的示例中，单击按钮时将自动调用。此外，如果指定了委托，则该按钮将在返回 时自动禁用，如果返回 ，则启用该按钮。CommandParameterDelegateCommand<T>ExecuteSubmitCommandCanExecuteCanExecutefalsetrue
+还可以选择使用该 CommandParameter 属性定义命令参数。预期参数的类型在 DelegateCommand<T> 泛型声明中指定。当用户与该控件交互时，该控件将自动调用该命令，并且命令参数（如果提供）将作为参数传递给该命令 Execute 的方法。在前面的示例中，单击按钮时将自动调用。 SubmitCommand 此外，如果指定了 CanExecute 委托，则该按钮将在 CanExecute 返回 false 时自动禁用，如果返回 true ，则启用该按钮。
 
-引发变更通知
-ViewModel 通常需要指示命令状态的更改，以便 UI 中绑定到命令的任何控件都将更新其启用状态，以反映绑定命令的可用性。提供了几种将这些通知发送到 UI 的方法。CanExecuteDelegateCommand
+# 引发变更通知
+ViewModel 通常需要指示命令 CanExecute 状态的更改，以便 UI 中绑定到命令的任何控件都将更新其启用状态，以反映绑定命令的可用性。提供了 DelegateCommand 几种将这些通知发送到 UI 的方法。
 
-RaiseCanExecuteChanged
-每当需要手动更新绑定的 UI 元素的状态时，请使用该方法。例如，当属性值发生更改时，我们将调用属性的 setter 以通知 UI 状态更改。RaiseCanExecuteChangedIsEnabledRaiseCanExecuteChanged
-```
+# RaiseCanExecuteChanged
+每当需要手动更新绑定的 UI 元素的状态时，请使用该 RaiseCanExecuteChanged 方法。例如，当 IsEnabled 属性值发生更改时，我们将调用 RaiseCanExecuteChanged 属性的 setter 以通知 UI 状态更改。
+```cs
 private bool _isEnabled;
 public bool IsEnabled
 {
@@ -86,9 +86,9 @@ public bool IsEnabled
     }
 }
 ```
-ObservesProperty
-如果命令应在属性值更改时发送通知，则可以使用该方法。使用该方法时，每当提供的属性的值发生更改时，都会自动调用以通知 UI 状态更改。ObservesPropertyObservesPropertyDelegateCommandRaiseCanExecuteChanged
-```
+# ObservesProperty
+如果命令应在属性值更改时发送通知，则可以使用该 ObservesProperty 方法。使用该 ObservesProperty 方法时，每当提供的属性的值发生更改时， DelegateCommand 都会自动调用 RaiseCanExecuteChanged 以通知 UI 状态更改。
+```cs
 public class ArticleViewModel : BindableBase
 {
     private bool _isEnabled;
@@ -116,12 +116,11 @@ public class ArticleViewModel : BindableBase
     }
 }
 ```
-注意
-使用该方法时，可以链式注册多个属性以进行观察。例：。ObservesPropertyObservesProperty(() => IsEnabled).ObservesProperty(() => CanSave)
+?>使用该 ObservesProperty 方法时，可以链式注册多个属性以进行观察。示例： ObservesProperty(() => IsEnabled).ObservesProperty(() => CanSave) .
 
-观察 CanExecute
-如果 your 是简单属性的结果，则可以省去声明委托的需要，而是使用该方法。 不仅会在注册的属性值更改时向 UI 发送通知，而且还会使用与实际委托相同的属性。CanExecuteBooleanCanExecuteObservesCanExecuteObservesCanExecuteCanExecute
-```
+# ObservesCanExecute
+如果你的 CanExecute 是简单 Boolean 属性的结果，则可以省去声明 CanExecute 委托的需要，而是使用该 ObservesCanExecute 方法。 ObservesCanExecute 不仅会在注册的属性值更改时向 UI 发送通知，而且还会使用与实际 CanExecute 委托相同的属性。
+```cs
 public class ArticleViewModel : BindableBase
 {
     private bool _isEnabled;
@@ -144,14 +143,14 @@ public class ArticleViewModel : BindableBase
     }
 }
 ```
-警告
-不要尝试链式寄存器方法。只能观察到委托的一个属性。ObservesCanExecuteCanExcute
 
-实现基于任务的 DelegateCommand
-在当今的 / 世界中，在委托内部调用异步方法是一个非常常见的要求。每个人的第一反应是他们需要一个，但这种假设是错误的。 从本质上讲，它是同步的，并且应将 AND 委托视为事件。这意味着这是用于命令的完全有效的语法。有两种方法可以将 async 方法与 .asyncawaitExecuteAsyncCommandICommandExecuteCanExecuteasync voidDelegateCommand
+!>不要尝试链式寄存器 ObservesCanExecute 方法。只能观察到 CanExcute 委托的一个属性。
 
-选项 1：
-```
+# 实现基于任务的 DelegateCommand
+在当今的 async / await 世界中，在委托内部 Execute 调用异步方法是一个非常常见的要求。每个人的第一反应是他们需要一个 AsyncCommand ，但这种假设是错误的。 ICommand 从本质上讲， Execute 它是同步的，并且应将 AND CanExecute 委托视为事件。这意味着 async void 这是用于命令的完全有效的语法。有两种方法可以将 async 方法与 DelegateCommand .
+
+方式 1：
+```cs
 public class ArticleViewModel
 {
     public DelegateCommand SubmitCommand { get; private set; }
@@ -167,8 +166,8 @@ public class ArticleViewModel
     }
 }
 ```
-选项 2：
-```
+方式 2：
+```cs
 public class ArticleViewModel
 {
     public DelegateCommand SubmitCommand { get; private set; }

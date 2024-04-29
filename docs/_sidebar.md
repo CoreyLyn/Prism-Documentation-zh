@@ -1,9 +1,9 @@
 - 目录
   - [Prism简介](introduction.md)
   - 命令（Commands）
-    - [Commanding](commands/commanding.md)
-    - [复合命令（Composite Commands）](commands/composite-commands.md)
-    - [异步命令（Async Commands）](commands/async-commands.md)
+    - [命令操作](commands/commanding.md)
+    - [复合命令](commands/composite-commands.md)
+    - [异步命令](commands/async-commands.md)
     - [错误处理](commands/error-handling.md)
   - 依赖注入（Dependency Injection）
     - [开始使用](dependency-injection/index.md)
