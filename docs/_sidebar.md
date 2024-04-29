@@ -1,22 +1,36 @@
 - 目录
-  - [Prism简介](introduction/Prism简介.md)
+  - [Prism简介](introduction.md)
   - 命令（Commands）
-    - [Commanding](commands/Commanding.md)
+    - [Commanding](commands/commanding.md)
+    - [复合命令（Composite Commands）](commands/composite-commands.md)
+    - [异步命令（Async Commands）](commands/async-commands.md)
+    - [错误处理](commands/error-handling.md)
   - 依赖注入（Dependency Injection）
-    - 开始
-    - 注册
+    - [开始使用](dependency-injection/index.md)
+    - [注册类](dependency-injection/registering-types.md)
+    - [微软扩展（补充）](dependency-injection/servicecollection-supplement.md)
+    - [平台特定服务](dependency-injection/platform-specific-services.md)
+    - [异常处理](dependency-injection/resolution-errors.md)
+    - [容器定位器（ContainerLocator）](dependency-injection/container-locator.md)
+    - [附录](dependency-injection/appendix.md)
   - 对话服务（Dialog Service）
-    - 对话服务
-  - 事件聚合（Event Aggregator）
+    - [对话服务](dialogs/index.md)
+    - [IDialogAware ViewModels](dialogs/dialog-aware.md)
+    - [IDialogWindow（WPF & Uno Platform）](dialogs/dialog-window.md)
+  - [事件聚合器（Event Aggregator）](event-aggregator.md)
   - Mvvm
-    - 绑定
-    - ViewModelLocator
+    - [绑定](mvvm/bindablebase.md)
+    - [ViewModelLocator](mvvm/viewmodel-locator.md)
   - 模块化（Modularity）
-    - 开始
-    - 模块目录
-    - 模块初始化
+    - [开始使用](modularity/index.md)
+    - [模块目录](modularity/module-catalog.md)
+    - [模块初始化](modularity/module-initialization.md)
   - 导航（Navigation）
-    - INavigationParameters
+    - [INavigationParameters](navigation/navigation-parameters.md)
+    - [Page Navigation](navigation/page-navigation.md)
+    - 区域（Regions）
+        - [开始使用](navigation/regions/index.md)
   - 平台（Platforms）
     - Wpf
+        - [介绍](platforms/wpf/introduction.md)
   - 插件（Plugins）
