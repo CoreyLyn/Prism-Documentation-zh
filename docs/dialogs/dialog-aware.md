@@ -1,6 +1,6 @@
 # IDialogAware
 
-The `IDialogAware` interface has undergone some updates in Prism 9 to help you write code that better meets your needs by providing a more robust API that is able to adapt to your needs.
+该 `IDialogAware` 界面在 Prism 9 中进行了一些更新，通过提供能够适应您需求的更强大的 API，帮助您编写更好地满足您需求的代码。
 
 ```cs
 public interface IDialogAware
@@ -14,7 +14,7 @@ public interface IDialogAware
 
 ## Can Close
 
-The `IDialogAware` interface provides the method `CanCloseDialog()`. This allows you to provide any custom logic that you may require to determine whether or not the Dialog should be allowed to close:
+该 `IDialogAware` 接口提供了方法 `CanCloseDialog() `。这允许您提供任何自定义逻辑，以确定是否应允许关闭对话框：
 
 ```cs
 public class MyDialogViewModel : IDialogAware
@@ -32,10 +32,9 @@ public class MyDialogViewModel : IDialogAware
 
 ## DialogCloseListener
 
-The DialogCloseListener is new in Prism 9 and replaces the event that was in the original API. The DialogCloseListener allows you more flexibility and is part of the Dialog Service's enhanced API.
+DialogCloseListener 是 Prism 9 中的新增功能，它取代了原始 API 中的事件。DialogCloseListener 为您提供了更大的灵活性，并且是 Dialog Service 增强 API 的一部分。
 
-> [!NOTE]
-> The RequestClose property should be implemented as shown below. This property is set by DialogService itself and should not be set by your code.
+?> RequestClose 属性应按如下所示实现。此属性由 DialogService 本身设置，不应由代码设置。
 
 ```cs
 public class MyDialogViewModel : IDialogAware
@@ -44,9 +43,9 @@ public class MyDialogViewModel : IDialogAware
 }
 ```
 
-### Using the DialogCloseListener
+### 使用 DialogCloseListener
 
-One of the benefits of the DialogCloseListener is that it allows you more flexibility when invoking it.
+DialogCloseListener 的优点之一是，它在调用它时具有更大的灵活性。
 
 ```cs
 private void OnMyCommandExecuted()
@@ -73,6 +72,6 @@ private void OnMyCommandExecuted()
 }
 ```
 
-## Additional Considerations
+## 其他注意事项
 
-When building apps with .NET MAUI you may want to consider using Popup Pages. With the Commercial Plus license you can take advantage of the [`Prism.Plugin.Popups` package for .NET MAUI](xref:Plugins.Popups).
+使用 .NET MAUI 生成应用时，可能需要考虑使用弹出页。使用 Commercial Plus 许可证，您可以利用 [`Prism.Plugin.Popups` package for .NET MAUI](xref:Plugins.Popups).
