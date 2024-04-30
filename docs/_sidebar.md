@@ -15,22 +15,23 @@
     - [附录](dependency-injection/appendix.md)
   - 对话服务（Dialog Service）
     - [对话服务](dialogs/index.md)
-    - [IDialogAware ViewModels](dialogs/dialog-aware.md)
-    - [IDialogWindow（WPF & Uno Platform）](dialogs/dialog-window.md)
+    - [IDialogAware 视图模型](dialogs/dialog-aware.md)
+    - [IDialogWindow（WPF & Uno 平台）](dialogs/dialog-window.md)
   - [事件聚合器（Event Aggregator）](event-aggregator.md)
   - Mvvm
-    - [绑定](mvvm/bindablebase.md)
-    - [ViewModelLocator](mvvm/viewmodel-locator.md)
+    - [BindableBase](mvvm/bindablebase.md)
+    - [ViewModel 定位器（ViewModelLocator）](mvvm/viewmodel-locator.md)
   - 模块化（Modularity）
     - [开始使用](modularity/index.md)
     - [模块目录](modularity/module-catalog.md)
     - [模块初始化](modularity/module-initialization.md)
   - 导航（Navigation）
     - [INavigationParameters](navigation/navigation-parameters.md)
-    - [Page Navigation](navigation/page-navigation.md)
+    - [页面导航](navigation/page-navigation.md)
     - 区域（Regions）
         - [开始使用](navigation/regions/index.md)
   - 平台（Platforms）
     - Wpf
         - [介绍](platforms/wpf/introduction.md)
   - 插件（Plugins）
+    - 基本会话
