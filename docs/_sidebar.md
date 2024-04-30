@@ -1,5 +1,5 @@
 - 目录
-  - [Prism简介](introduction.md)
+  - [Prism简介](index.md)
   - 命令（Commands）
     - [命令操作](commands/commanding.md)
     - [复合命令](commands/composite-commands.md)
@@ -8,7 +8,7 @@
   - 依赖注入（Dependency Injection）
     - [开始使用](dependency-injection/index.md)
     - [注册类](dependency-injection/registering-types.md)
-    - [微软扩展（补充）](dependency-injection/servicecollection-supplement.md)
+    - [Microsoft 扩展（补充）](dependency-injection/servicecollection-supplement.md)
     - [平台特定服务](dependency-injection/platform-specific-services.md)
     - [异常处理](dependency-injection/resolution-errors.md)
     - [容器定位器（ContainerLocator）](dependency-injection/container-locator.md)
@@ -30,8 +30,23 @@
     - [页面导航](navigation/page-navigation.md)
     - 区域（Regions）
         - [开始使用](navigation/regions/index.md)
+        - [区域 Manager](navigation/regions/region-manager.md)
+        - [区域 Adapters](navigation/regions/region-adapters.md)
+        - [区域 Behaviors](navigation/regions/region-behaviors.md)
+        - [关于 Prism 中的导航](navigation/regions/index.md)
+        - [基础区域导航](navigation/regions/basic-region-navigation.md)
+        - [View/ViewModel 参与导航](navigation/regions/view-viewmodel-participation.md)
+        - [导航到现有视图](navigation/regions/navigation-existing-views.md)
+        - [传递参数](navigation/regions/passing-parameters.md)
+        - [确认导航](navigation/regions/confirming-navigation.md)
+        - [控制视图生命周期](navigation/regions/controlling-view-lifetime.md)
+        - [导航 Journal](navigation/regions/navigation-journal.md)
   - 平台（Platforms）
     - Wpf
         - [介绍](platforms/wpf/introduction.md)
+        - [开始使用](platforms/wpf/getting-started.md)
+        - [视图组成](platforms/wpf/view-composition.md)
+        - 交互
+          - [将事件绑定到命令](platforms/wpf/interactivity/event-to-command.md)
   - 插件（Plugins）
     - 基本会话

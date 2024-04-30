@@ -1,7 +1,3 @@
----
-uid: Platforms.Wpf.Interactivity.EventToCommand
----
-
 # Binding Events to Commands
 
 The ```InvokeCommandAction``` class provides a convenient way to, in XAML, "bind" events to ```ICommand``` properties according to the MVVM paradigm of avoiding code behind.

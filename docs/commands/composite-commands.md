@@ -12,10 +12,9 @@ The `CompositeCommand` class represents a command that is composed from multiple
 
 The `CompositeCommand` class maintains a list of child commands (`DelegateCommand` instances). The `Execute` method of the `CompositeCommand` class simply calls the `Execute` method on each of the child commands in turn. The `CanExecute` method similarly calls the `CanExecute` method of each child command, but if any of the child commands cannot be executed, the `CanExecute` method will return `false`. In other words, by default, a `CompositeCommand` can only be executed when all the child commands can be executed.
 
-> [!NOTE]
-> `CompositeCommand` can be found in the Prism.Commands namespace which is located in the Prism.Core NuGet package.
+?> `CompositeCommand` can be found in the Prism.Commands namespace which is located in the Prism.Core NuGet package.
 
-<iframe height="510" src="https://www.youtube.com/embed/kssprOqdfME">
+<iframe height="510" src="https://www.youtube.com/embed/kssprOqdfME" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ## Creating a Composite Command
 

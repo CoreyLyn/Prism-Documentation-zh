@@ -20,7 +20,7 @@ public class ViewAViewModel : BindableBase
 
 ### 为什么使用 SetProperty
 
-您可能想知道，为什么要使用 `SetProperty` ？毕竟，你不能自己调用RaisePropertyChanged吗？简短的回答是你可以。但是，这通常是不可取的，因为您将丢失内置的 EqualityComparer，这有助于确保如果多次调用具有相同值 `INotifyPropertyChanged` 的 setter，则仅在事件第一次更改时触发 `PropertyChanged` 事件。
+您可能想知道，为什么要使用 `SetProperty` ？毕竟，你不能自己调用RaisePropertyChanged吗？简短的回答是你可以。但是，这通常是不建议的，因为您将丢失内置的 EqualityComparer，这有助于确保如果多次调用具有相同值 `INotifyPropertyChanged` 的 setter，则仅在事件第一次更改时触发 `PropertyChanged` 事件。
 
 ```cs
 public class ViewAViewModel : BindableBase

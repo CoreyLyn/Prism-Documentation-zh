@@ -1,21 +1,20 @@
-# Registering Types with Prism
+# 使用 Prism 注册类型
 
-Similar to most Dependency Injection models, Prism provides abstractions around 3 service lifetimes:
+与大多数依赖注入模型类似，Prism 提供了大约 3 个服务生命周期的抽象：
 
-1) Transient (Get a new instance every time the service or type is requested)
-2) Singleton (Get the same instance every time the service or type is requested)
-3) Scoped (Get a new instance on each container scope, but the same instance within a specific container scope)
+1) Transient（瞬态：每次请求服务或类型时获取新实例）
+2) Singleton（单例：每次请求服务或类型时获取相同的实例）
+3) Scoped（作用域：在每个容器作用域上获取一个新实例，但在特定容器作用域内获取相同的实例）
 
-> [!NOTE]
-> By default Prism does not use scoping except within Prism.Maui which creates a scope around each Page. This is used for services such as the `INavigationService`, `IPageDialogService`, and `IDialogService`.
+?> 默认情况下，Prism 不使用scoping，除非在 Prism.Maui 中，它会在每个页面周围创建一个scope。 这用于 `INavigationService`、`IPageDialogService` 和 `IDialogService` 等服务.
 
-For those who may be familiar with ASP.NET Core you may be familiar with 3 basic types of dependency registrations: Transients, Singletons, and Scoped Services. Unlike the web environment in which many of your services are scoped around the User Request, for Desktop and Mobile applications we are dealing with a single user. As a result, we must instead decide whether for memory management and other business requirements our services are best suited as a single instance that will be reused throughout our application or whether we will create a new instance each time it is requested and then allow the Garbage Collector to free up the memory when we are done with it.
+对于熟悉 ASP.NET Core 的用户可能也会熟悉这 3 种基本类型的依赖项注册：Transients, Singletons和 Scoped 服务。与许多服务都围绕用户请求的 Web 环境不同，对于桌面和移动应用程序，我们处理的是单个用户。因此，我们必须决定，对于内存管理和其他业务需求，我们的服务是否最适合作为将在整个应用程序中重用的单个实例，或者我们是否在每次请求时创建一个新实例，然后允许垃圾回收器在我们完成它时释放内存。
 
-It is also important to consider that Prism has a hard requirement on the use of named service registrations. This is what allows Prism to register your Page for navigation and then resolve it later based on the Uri segment like `MyMasterDetailPage/NavigationPage/ViewA`. Any Dependency Injection container which does not support named services out of the box therefore cannot and will not be implemented officially by the Prism team.
+同样重要的是要考虑到 Prism 对使用指定服务注册有硬性要求。这就是 Prism 允许注册您的页面以进行导航，然后稍后根据 Uri 段（如 `MyMasterDetailPage/NavigationPage/ViewA` .因此，任何不支持开箱即用命名服务的依赖注入容器都不能也不会由 Prism 团队正式实现。
 
-## Registering Transient Services
+## 注册 Transient 服务
 
-For those services that you expect to create a new instance each time it is created you will simply call the `Register` method and provide the Service Type and the Implementing Type, except in cases where it may be appropriate to simply register the concrete type.
+对于那些您期望每次创建时都创建一个新实例的服务，只需调用 Register 方法并提供服务类型和实现类型，除非在某些情况下，简单地注册具体类型可能更为合适。
 
 ```cs
 // Where it will be appropriate to use FooService as a concrete type
@@ -24,12 +23,11 @@ containerRegistry.Register<FooService>();
 containerRegistry.Register<IBarService, BarService>();
 ```
 
-## Registering Singleton Services
+## 注册 Singleton 服务
 
-Many times you may have a service which is used throughout your application. As a result it would not be a good idea to create a new instance every time you need the service. In order to provide better memory management it is therefore a better practice to make such services a Singleton that can be used throughout the application. There are also many times in which you may need a service that retains it state throughout the lifecycle of your application. For either of these cases it makes far more sense to register your service as a Singleton.
+很多时候，您可能需要一个服务在整个应用程序中使用，因此每次需要该服务时都创建新实例都不是一个好主意。因此，为了提供更好的内存管理，更好的做法是将此类服务设置为可以在整个应用程序中使用的单一实例。在许多情况下，您可能需要在应用程序的整个生命周期中保持其状态的服务。对于这两种情况中的任何一种，将服务注册为单一实例都更有意义。
 
-> [!NOTE]
-> Singleton Services are not actually created, and therefore do not start using memory until the first time the service is resolved by your application.
+?> 单例服务实际上并未创建，因此在应用程序首次解析服务之前不会开始使用内存。
 
 ```cs
 // Where it will be appropriate to use FooService as a concrete type
@@ -38,9 +36,9 @@ containerRegistry.RegisterSingleton<FooService>();
 containerRegistry.RegisterSingleton<IBarService, BarService>();
 ```
 
-### Registering a Service Instance
+### 注册服务实例
 
-While many times you'll want to register a Singleton by simply providing the Service and Implementation types, there are times in which you may want to new up a service instance and provide it for a given service, or in which you may want to register the Current instance from a plugin such as MonkeyCache as shown below:
+虽然很多时候您希望通过简单地提供 Service 和 Implementation 类型来注册 Singleton，但有时您可能希望新建服务实例并为给定服务提供它，或者您可能希望从插件（如 MonkeyCache）注册当前实例，如下所示：
 
 ```cs
 containerRegistry.RegisterInstance<IFoo>(new FooImplementation());
@@ -50,12 +48,11 @@ Barrel.ApplicationId = "your_unique_name_here";
 containerRegistry.RegisterInstance<IBarrel>(Barrel.Current);
 ```
 
-## Checking if a Service has been Registered
+## 检查服务是否已注册
 
-There are many times particularly when writing Prism Modules or Plugins in which you may want to check if a service has been registered and then do something based on whether it has or has not been registered.
+很多时候，特别是在编写 Prism 模块或插件时，您可能希望检查服务是否已注册，然后根据它是否已注册执行某些操作。
 
-> [!NOTE]
-> When working with Prism Modules if you have a hard dependency on a given service it should be injected into the constructor so as to generate an exception when initializing the Module if the service type is missing. You should only use `IsRegistered` to check for it if your intent is to register a default implementation.
+?> 使用 Prism 模块时，如果对给定服务有硬依赖性，则应将其注入构造函数中，以便在初始化模块时在缺少服务类型时生成异常。仅当您的意图是注册默认实现时，才应用于 `IsRegistered` 检查它。
 
 ```cs
 if (containerRegistry.IsRegistered<ISomeService>())
@@ -64,9 +61,9 @@ if (containerRegistry.IsRegistered<ISomeService>())
 }
 ```
 
-## Lazy Resolution
+## 延迟加载
 
-As shown previously you can register your services like `containerRegistry.Register<IFoo, Foo>()`. Many developers may have use cases where they want to conserve memory and lazy load services either as `Func<IFoo>` or `Lazy<IFoo>`. Prism 8 supports this out of the box. In order to do this you simply need to add the parameter to your ViewModel or Service as shown below.
+如前所述，您可以注册您的服务，例如 `containerRegistry.Register<IFoo, Foo>()` 。许多开发人员可能有这样的用例：他们希望节省内存和延迟加载服务， `Func<IFoo>` 或者是 `Lazy<IFoo>` 或 。Prism 8 开箱即用地支持此功能。为此，您只需将参数添加到 ViewModel 或 Service 中，如下所示。
 
 ```cs
 public class ViewAViewModel
@@ -77,12 +74,11 @@ public class ViewAViewModel
 }
 ```
 
-> [!NOTE]
-> Take note of the service registration type. It generally does NOT make sense to use `Lazy<T>` or `Func<T>` resolutions when you are working with a Singleton Service. For instance the `IEventAggregator` is a singleton. This means that you get a single instance of the Event Aggregator that is used through the entire application. By using `Lazy<T>` or `Func<T>` you ultimately use more memory and may take performance hits instead of just requesting the service outright.
+?> 记下服务注册类型。当您使用单例服务时，使用 `Lazy<T>` 或 `Func<T>` 解决方法通常没有意义。例如，是 `IEventAggregator` 单例。这意味着你将获得整个应用程序中使用的事件聚合器的单个实例。通过使用 `Lazy<T>` 或 `Func<T>` 最终使用更多内存，可能会对性能造成影响，而不仅仅是直接请求服务。
 
-## Resolve All
+## 全部解析
 
-Some Developers may find the need to Register multiple implementations of the same service contract with an expectation of resolving all of them. As a common use case, Shiny uses this pattern with some of its delegate interfaces. This can allow you to build more modular code by responding to the same event in bite sized chunks. Again there is nothing special that you need to do with the registration. To use this feature you simply need to inject `IEnumerable<T>` into your constructor as show here.
+一些开发人员可能需要为同一服务契约注册多个实现，并希望解析所有这些实现。作为一个常见的用例，Shiny使用这种模式处理其一些委托接口。这可以让您通过以小块的方式响应相同的事件来构建更模块化的代码。再次强调，在注册时您不需要做任何特别的事情。要使用这个功能，您只需要在构造函数中注入 `IEnumerable<T>`，正如这里所示。
 
 ```cs
 public class SomeService
@@ -93,5 +89,4 @@ public class SomeService
 }
 ```
 
-> [!NOTE]
-> This feature is only supported in DryIoc at this time. This may become available to those using Unity Container once version 6 releases.
+?> 此功能目前仅在 DryIoc 中受支持。Prism 6 发布后，使用 Unity 容器的用户可能会使用此功能。

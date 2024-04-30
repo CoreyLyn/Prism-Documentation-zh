@@ -1,7 +1,3 @@
----
-uid: Platforms.Wpf.GettingStarted
----
-
 # Getting Started
 
 Getting started with Prism is pretty easy. Follow the steps below and you will be up and running quickly with the start of a modular and easy to maintain app.

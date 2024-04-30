@@ -1,28 +1,27 @@
 # Getting Started
 
-> [!NOTE}
-> As a part of the Prism 9.0 initiative, a lot of focus has been given to unifying the Prism API across all of the supported platforms. As a result the Region Abstractions are no longer platform specific. This greatly simplifies what you must learn as you transition from one platform to another. As an added benefit this means that you can now build applications that share ViewModels across WPF, .NET MAUI and Uno Platform and even port your Xamarin.Forms application code to these other platforms.
+?> 作为 Prism 9.0 计划的一部分，我们非常重视在所有受支持的平台上统一 Prism API。因此，区域抽象不再是特定于平台的。这大大简化了从一个平台过渡到另一个平台时必须学习的内容。作为额外的好处，这意味着你现在可以生成跨 WPF、.NET MAUI 和 Uno 平台共享 ViewModel 的应用程序，甚至可以将 Xamarin.Forms 应用程序代码移植到这些其他平台。
 
-As the user interacts with a rich client application, its user interface (UI) will be continuously updated to reflect the current task and data that the user is working on. The UI may undergo considerable changes over time as the user interacts with and completes various tasks within the application. The process by which the application coordinates these UI changes is often referred to as *navigation*. This topic describes how to implement navigation for composite Model-View-ViewModel (MVVM) applications using the Prism library.
+当用户与富客户端应用程序交互时，其用户界面 （UI） 将不断更新，以反映用户正在处理的当前任务和数据。随着用户与应用程序交互并完成应用程序中的各种任务，UI 可能会随着时间的推移而发生相当大的变化。应用程序协调这些 UI 更改的过程通常称为导航。本主题介绍如何使用 Prism 库实现复合模型-视图-视图模型 （MVVM） 应用程序的导航。
 
-Frequently, navigation means that certain controls in the UI are removed, while other controls are added. In other cases, navigation may mean that the visual state of one or more existing controls is updated. As an example,as the state of the app changes, some controls may be simply hidden or collapsed, while other controls are shown or expanded. Navigation may also mean that the data being displayed by a control is updated to reflect the current state of the application. For example, in a master-detail scenario, the data displayed in the detail view will be updated based on the currently selected item in the master view. All of these scenarios can be considered navigation because the user interface is updated to reflect the user's current task and the application's current state.
+通常，导航意味着删除 UI 中的某些控件，同时添加其他控件。在其他情况下，导航可能意味着更新一个或多个现有控件的可视状态。例如，当应用状态发生变化时，某些控件可能只是隐藏或折叠，而其他控件则显示或展开。导航还可能意味着控件显示的数据将更新以反映应用程序的当前状态。例如，在大从-从场景下，将根据大图中当前选定的项目更新明细视图中显示的数据。所有这些方案都可以被视为导航，因为用户界面已更新以反映用户的当前任务和应用程序的当前状态。
 
-Navigation within an application can result from the user's interaction with the UI (via mouse events or other UI gestures) or from the application itself as a result of internal logic-driven state changes. In some cases, navigation may involve very simple UI updates that require no custom application logic. In other cases, the application may implement complex logic to programmatically control navigation to ensure that certain business rules are enforced—for example, the application may not allow the user to navigate away from a certain form without first ensuring that the data entered is correct.
+应用程序中的导航可以由用户与 UI 的交互（通过鼠标事件或其他 UI 手势）产生，也可以由应用程序本身作为内部逻辑驱动的状态更改的结果。在某些情况下，导航可能涉及非常简单的 UI 更新，不需要自定义应用程序逻辑。在其他情况下，应用程序可以实现复杂的逻辑，以编程方式控制导航，以确保强制执行某些业务规则，例如，应用程序可能不允许用户在未首先确保输入的数据正确的情况下离开特定窗体。
 
-Implementing the required navigation behavior in a Windows Presentation Foundation (WPF) or UNO application can often be relatively straightforward because it provides direct support for navigation. However, navigation can be more complex to implement in applications that use the Model-View-ViewModel (MVVM) pattern or in composite applications that use multiple loosely-coupled modules. Prism provides guidance on implementing navigation in these situations.
+在 Windows Presentation Foundation （WPF） 或 UNO 应用程序中实现所需的导航行为通常相对简单，因为它提供对导航的直接支持。但是，在使用模型-视图-视图模型 （MVVM） 模式的应用程序或使用多个松散耦合模块的复合应用程序中实现导航可能更复杂。Prism 提供了在这些情况下实现导航的指导。
 
-## Navigation in Prism
+## Prism 中的导航
 
-Navigation is defined as the process by which the application coordinates changes to its UI as a result of the user's interaction with the application or internal application state changes.
+导航被定义为应用程序协调由于用户与应用程序的交互或内部应用程序状态更改而对其 UI 的更改的过程。
 
-| Navigation Type | Description |
+| 导航类型 | 描述 |
 |-----------------|-------------|
 | State Based     | Navigation accomplished via state changes to existing controls in the visual tree. |
 | View Based      | Navigation accomplished via the addition or removal of elements from the visual tree. |
 
-Prism provides guidance on implementing both styles of navigation, focusing on the case where the application is using the Model-View-ViewModel (MVVM) pattern to separate the UI (encapsulated in the view) from the presentation logic and data (encapsulated in the view model).
+Prism 提供了有关实现这两种导航样式的指导，重点介绍应用程序使用 Model-View-ViewModel （MVVM） 模式将 UI（封装在视图中）与表示逻辑和数据（封装在视图模型中）分开的情况。
 
-| Topics                            | Description |
+| 主题                            | 描述 |
 |-----------------------------------|-------------|
 | [Basic Region Navigation](xref:Navigation.Regions.BasicRegionNavigation) | Get started with the Prism navigation system. |
 | [Confirming Navigation](xref:Navigation.Regions.ConfirmingNavigation) | Learn how to allow the user to interact with the navigation system. |

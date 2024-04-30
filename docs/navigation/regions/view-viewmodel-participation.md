@@ -1,6 +1,3 @@
----
-uid: Navigation.Regions.ViewViewModelParticipation
----
 # View and View Model Participation in Navigation
 
 Frequently, the views and view models in your application will want to participate in navigation. The **INavigationAware** interface enables this. You can implement this interface on the view or (more commonly) the view model. By implementing this interface, your view or view model can opt-in to participate in the navigation process.

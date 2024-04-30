@@ -1,12 +1,12 @@
-# Using the ViewModelLocator
+# 使用 ViewModelLocator
 
-The `ViewModelLocator` is used to wire the `DataContext` of a view to an instance of a ViewModel using a standard naming convention.
+用于 `ViewModelLocator` 使用标准命名约定将 `DataContext` 视图连接到 ViewModel 的实例。
 
-The Prism `ViewModelLocator` has an `AutoWireViewModel` attached property, that when set to `true` calls the `AutoWireViewModelChanged` method in the `ViewModelLocationProvider` class to resolve the ViewModel for the view, and then set the view’s data context to an instance of that ViewModel. This behavior is on by default: if you don't want that for your view, you need to opt-out.
+Prism `ViewModelLocator` 具有附加 `AutoWireViewModel` 属性，当设置为 `true` 调用 `ViewModelLocationProvider` 类中 `AutoWireViewModelChanged` 的方法以解析视图的 ViewModel，然后将视图的数据上下文设置为该 ViewModel 的实例时。默认情况下，此行为处于启用状态：如果您不希望视图出现此行为，则需要选择退出。
 
-> In the case of **WPF**, this is only the default behavior when using **region navigation** and ```IDialogService```. If you are using **view injection**, your view will need to opt-in.
+> 对于 **WPF**, 这只是使用 **区域导航** 和 ```IDialogService```. 如果您使用的是 **视图注入**, 您的视图将需要选择加入。
 
-Use the `AutoWireViewModel` attached property as below. Set the value to ```False``` to opt-out and ```True``` to explicitly opt-in.
+使用附加的 `AutoWireViewModel` 属性如下所示. 将值设置为 ```False``` 选择退出， 置为 ```True``` 显式选择加入.
 
 ```xml
 <Window x:Class="Demo.Views.MainWindow"
@@ -15,28 +15,26 @@ Use the `AutoWireViewModel` attached property as below. Set the value to ```Fals
     prism:ViewModelLocator.AutoWireViewModel="False">
 ```
 
-To locate a ViewModel, the `ViewModelLocationProvider` first attempts to resolve the ViewModel from any mappings that may have been registered by the `ViewModelLocationProvider.Register` method (See [Custom ViewModel Registrations](#custom-viewmodel-registrations)).  If the ViewModel cannot be resolved using this approach, the `ViewModelLocationProvider` falls back to a convention-based approach to resolve the correct ViewModel type.  
+若要查找 ViewModel， `ViewModelLocationProvider` 首先尝试从 `ViewModelLocationProvider.Register` 该方法可能已注册的任何映射中解析 ViewModel (请参阅 [自定义 ViewModel 注册](#custom-viewmodel-registrations))。 如果无法使用此方法解析 ViewModel，则 `ViewModelLocationProvider` 回退到基于约定的方法来解析正确的 ViewModel 类型。
 
-This convention assumes:
+本约定假定：
 
-- that ViewModels are in the same assembly as the view types
-- that ViewModels are in a `.ViewModels` child namespace
-- that views are in a `.Views` child namespace
-- that ViewModel names correspond with view names and end with "ViewModel."
+- ViewModel 与视图类型位于同一程序集中
+- ViewModel 位于 `.ViewModels` 子命名空间中
+- 视图位于 `.Views` 子命名空间中
+- ViewModel 名称与视图名称相对应，并以 "ViewModel." 结尾
 
-> [!Note]
-> The `ViewModelLocationProvider` can be found in the `Prism.Mvvm` namespace in the **Prism.Core** NuGet package. The `ViewModelLocator` can be found in the `Prism.Mvvm` namespace in the platform specific packages (**Prism.WPF**, **Prism.Forms**) NuGet package.
+?> `ViewModelLocationProvider` 可以在 **Prism.Core** NuGet 包的 `Prism.Mvvm` 命名空间中找到。`ViewModelLocator` 可以在特定于平台的(**Prism.WPF**, **Prism.Forms**) NuGet包的 `Prism.Mvvm` 命名空间中找到。
 
-> [!Note]
-> The ViewModelLocator is required, and automatically applied to every View, when developing with Xamarin.Forms as it is responsible for providing the correct instance of the `INavigationService` to the ViewModel. When developing a Xamarin.Forms app, the `ViewModelLocator` is opt-out only.
+?> 使用 Xamarin.Forms 进行开发时，ViewModelLocator 是必需的，并自动应用于每个视图，因为它负责向 ViewModel 提供正确的 `INavigationService` 实例。开发 Xamarin.Forms 应用时， `ViewModelLocator` 只能选择退出。
 
-> [!Video https://www.youtube.com/embed/I_3LxBdvJi4]
+<iframe height="510" src="https://www.youtube.com/embed/I_3LxBdvJi4" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-## Change the Naming Convention
+## 更改命名约定
 
-If your application does not follow the `ViewModelLocator` default naming convention, you can change the convention to meet the requirements of your application.  The `ViewModelLocationProvider` class provides a static method called `SetDefaultViewTypeToViewModelTypeResolver` that can be used to provide your own convention for associating views to view models.
+如果应用程序不遵循 `ViewModelLocator` 默认命名约定，则可以更改约定以满足应用程序的要求。该 `ViewModelLocationProvider` 类提供了一个名为的 `SetDefaultViewTypeToViewModelTypeResolver` 静态方法，该方法可用于提供您自己的约定，用于将视图关联到视图模型。
 
-To change the `ViewModelLocator` naming convention, override the `ConfigureViewModelLocator` method in the `App.xaml.cs` class. Then provide your custom naming convention logic in the `ViewModelLocationProvider.SetDefaultViewTypeToViewModelTypeResolver` method.
+若要更改 `ViewModelLocator` 命名约定，请重写 `App.xaml.cs` 类中 `ConfigureViewModelLocator` 的方法。然后在 `ViewModelLocationProvider.SetDefaultViewTypeToViewModelTypeResolver` 方法中提供自定义命名约定逻辑。
 
 ```cs
 protected override void ConfigureViewModelLocator()
@@ -53,13 +51,13 @@ protected override void ConfigureViewModelLocator()
 }
 ```
 
-> [!Video https://www.youtube.com/embed/o4ibaOFvfww]
+<iframe height="510" src="https://www.youtube.com/embed/o4ibaOFvfww" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-## Custom ViewModel Registrations
+## 自定义 ViewModel 注册
 
-There may be instances where your app is following the `ViewModelLocator` default naming convention, but you have a number of ViewModels that do not follow the convention. Instead of trying to customize the naming convention logic to conditionally meet all your naming requirments, you can register a mapping for a ViewModel to a specific view directly with the `ViewModelLocator` by using the `ViewModelLocationProvider.Register` method.
+在某些情况下，你的应用可能遵循 `ViewModelLocator` 默认命名约定，但你有许多 ViewModel 不遵循该约定。您可以直接使用 `ViewModelLocator` 的 `ViewModelLocationProvider.Register` 方法将 ViewModel 的映射注册到特定视图，而不是尝试自定义命名约定逻辑以有条件地满足所有命名要求。
 
-The following examples show the various ways to create a mapping between a view called `MainWindow` and a ViewModel named `CustomViewModel`.
+下面的示例演示在名为 `MainWindow` 的视图和名为 `CustomViewModel` 的 ViewModel 之间创建映射的各种方法。
 
 **Type / Type**
 
@@ -85,19 +83,17 @@ ViewModelLocationProvider.Register<MainWindow>(() => Container.Resolve<CustomVie
 ViewModelLocationProvider.Register<MainWindow, CustomViewModel>();
 ```
 
-> [!Note]
-> Registering your ViewModels directly with the `ViewModelLocator` is faster than relying on the default naming convention. This is because the naming convention requires the use of reflection, while a custom mapping provides the type directly to the `ViewModelLocator`.
+?> 直接向 `ViewModelLocator` 注册 ViewModel 比依赖默认命名约定更快。这是因为命名约定要求使用反射，而自定义映射则直接向 `ViewModelLocator` .
 
-> [!Important]
-> The `viewTypeName` parameter must be the fully qualifyied name of the view's Type (`Type.ToString()`). Otherwise the mapping will fail.
+!> 该 `viewTypeName` 参数必须是视图的 Type (`Type.ToString()`) 的完全限定名称。否则，映射将失败。
 
-> [!Video https://www.youtube.com/embed/phMc4OuKs58]
+<iframe height="510" src="https://www.youtube.com/embed/phMc4OuKs58" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-## Control how ViewModels are Resolved
+## 控制 ViewModel 的解析方式
 
-By default, the `ViewModelLocator` will use the DI container you have chosen to create your Prism application to resolve ViewModels.  However, if you ever have the need to customize how ViewModels are resolved or change the resolver altogether, you can achieve this by using the `ViewModelLocationProvider.SetDefaultViewModelFactory` method.
+默认情况下， `ViewModelLocator` 将使用您选择的 DI 容器来创建 Prism 应用程序来解析 ViewModel。但是，如果您需要自定义 ViewModel 的解析方式或完全更改解析器，则可以使用该 `ViewModelLocationProvider.SetDefaultViewModelFactory` 方法实现此目的。
 
-This example shows how you might change the container used for resolving the ViewModel instances.
+此示例演示如何更改用于解析 ViewModel 实例的容器。
 
 ```cs
 protected override void ConfigureViewModelLocator()
@@ -111,7 +107,7 @@ protected override void ConfigureViewModelLocator()
 }
 ```
 
-This is an example of how you might check the type of the view the ViewModel is being created for, and performing logic to control how the ViewModel is created.
+下面是一个示例，说明如何检查为其创建 ViewModel 的视图类型，以及如何执行逻辑来控制 ViewModel 的创建方式。
 
 ```cs
 protected override void ConfigureViewModelLocator()
