@@ -1,6 +1,6 @@
-# Async Command's
+# 异步命令
 
-It is important to consider that Commands are effectively an EventHandler and as a result a Command could be invoked multiple times while the Command is still executing, particularly within the context of an Async Task. Prism 9.0 introduced the `AsyncDelegateCommand` and `AsyncDelegateCommand<T>`.
+重要的是要考虑到命令实际上是一个 EventHandler，因此，当命令仍在执行时，可以在命令执行时多次调用命令，尤其是在异步任务的上下文中。Prism 9.0 引入了 `AsyncDelegateCommand` 和 `AsyncDelegateCommand<T>`。
 
 ```cs
 public interface IAsyncCommand : ICommand
@@ -11,20 +11,20 @@ public interface IAsyncCommand : ICommand
 }
 ```
 
-While no platform explicitly supports the concept of an AsyncCommand and any implementation of an Async Command is specific to the implementing library. This does however provide you an ability to create custom controls with their own Command implementation that does support the `IAsyncCommand`. One benefit to the `AsyncDelegateCommand` is that it supports delegates that may or may not accept a CancellationToken.
+虽然没有平台明确支持 AsyncCommand 的概念，并且 Async Command 的任何实现都是特定于实现库的。但是，这确实使你能够使用自己的 Command 实现创建自定义控件，该实现确实支持 `IAsyncCommand` .这样做的一个好处 `AsyncDelegateCommand` 是，它支持可能接受也可能不接受 CancellationToken 的委托。
 
-## Parallel Execution
+## 并行执行
 
-By default the `AsyncDelegateCommand` does not allow parallel execution. To enable parallel execution you must call `EnableParallelExecution`. As part of this default behavior `CanExecute` will automatically return false while the Command is executing regardless of any other custom logic that you have provided for the `CanExecute` delegate.
+默认情况下，不允许 `AsyncDelegateCommand` 并行执行。要启用并行执行，必须调用 `EnableParallelExecution` 。作为此默认行为 `CanExecute` 的一部分，在执行命令时将自动返回 `false`，而不管您为 `CanExecute` 委托提供的任何其他自定义逻辑如何。
 
 ```cs
 new AsyncDelegateCommand(async () => Task.CompletedTask)
     .EnableParallelExecution()
 ```
 
-## Configuring the CancellationTokenSource
+## 配置 CancellationTokenSource
 
-There are two ways to configure the CancellationTokenSource for the Command.
+有两种方法可以为命令配置 CancellationTokenSource。
 
-1. Provide a `TimeSpan` to provide a default timeout for your Async Command.
-2. Provide a `Func<CancellationToken>` to provide the `CancellationToken` to be used by the Command.
+1. 提供 `TimeSpan` 可为 Async 命令提供默认超时。
+2. 提供 `Func<CancellationToken>` 以提供 `CancellationToken` Command来使用.

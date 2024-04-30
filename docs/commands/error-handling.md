@@ -1,10 +1,10 @@
-# Error Handling
+# 错误处理
 
-Prism 9 introduced better Error Handling for all Commands including the [AsyncDelegateCommand](xref:Commands.AsyncDelegateCommand). This provides several useful opportunities for app developers.
+Prism 9 为包括  [AsyncDelegateCommand](xref:Commands.AsyncDelegateCommand) 在内的所有命令引入了更好的错误处理。这为应用程序开发人员提供了几个有用的机会。
 
-1. Avoid needing to wrap every method in a `try/catch`.
-2. Provide multiple handlers to provide specific logic based on the type of Exception encountered.
-3. Share error handling logic across multiple commands.
+1. 避免需要将每个方法包装在 `try/catch`。
+2. 提供多个处理程序，以根据遇到的异常类型提供特定逻辑。
+3. 在多个命令之间共享错误处理逻辑。
 
 ```cs
 new DelegateCommand(() => { })
