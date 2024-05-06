@@ -1,42 +1,42 @@
-# Modular Application Development Using Prism Library
+# 使用 Prism 库进行模块化应用程序开发
 
-A modular application is an application that is divided into a set of loosely coupled functional units (named modules) that can be integrated into a larger application. A client module encapsulates a portion of the application's overall functionality and typically represents a set of related concerns. It can include a collection of related components, such as application features, including user interface and business logic, or pieces of application infrastructure, such as application-level services for logging or authenticating users. Modules are independent of one another but can communicate with each other in a loosely coupled fashion. Using a modular application design makes it easier for you to develop, test, deploy, and maintain your application.
+模块化应用程序是划分为一组松散耦合的功能单元（命名模块）的应用程序，这些功能单元可以集成到更大的应用程序中。客户端模块封装了应用程序整体功能的一部分，通常表示一组相关关注点。它可以包括相关组件的集合，例如应用程序功能（包括用户界面和业务逻辑），也可以包括应用程序基础结构（例如用于记录或验证用户身份的应用程序级服务）。模块彼此独立，但可以以松耦合的方式相互通信。使用模块化应用程序设计可以更轻松地开发、测试、部署和维护应用程序。
 
-For example, consider a personal banking application. The user can access a variety of functions, such as transferring money between accounts, paying bills, and updating personal information from a single user interface (UI). However, behind the scenes, each of these functions is encapsulated within a discrete module. These modules communicate with each other and with back-end systems such as database servers and web services. Application services integrate the various components within each of the different modules and handle the communication with the user. The user sees an integrated view that looks like a single application.
+例如，考虑个人银行应用程序。用户可以访问各种功能，例如在账户之间转账、支付账单以及从单个用户界面 （UI） 更新个人信息。然而，在幕后，这些功能中的每一个都封装在一个离散的模块中。这些模块相互通信，并与后端系统（如数据库服务器和 Web 服务）通信。应用程序服务将各种组件集成到每个不同的模块中，并处理与用户的通信。用户看到的是一个看起来像单个应用程序的集成视图。
 
-The following illustration shows a design of a modular application with multiple modules.
+下图显示了具有多个模块的模块化应用程序的设计。
 
 ![Module composition](../images/ModularityAppArchitecture.png)
 
-## Benefits of Building Modular Applications
+## 构建模块化应用程序的好处
 
-You are probably already building a well-architected application using assemblies, interfaces, and classes, and employing good object-oriented design principles. Even so, unless great care is taken, your application design may still be "monolithic" (where all the functionality is implemented in a tightly coupled way within the application), which can make the application difficult to develop, test, extend, and maintain.
+您可能已经在使用程序集、接口和类构建架构良好的应用程序，并采用良好的面向对象设计原则。即便如此，除非非常小心，否则您的应用程序设计可能仍然是“整体式”的（所有功能在应用程序中以紧密耦合的方式实现），这可能会使应用程序难以开发、测试、扩展和维护。
 
-The modular application approach, on the other hand, can help you to identify the large scale functional areas of your application and allow you to develop and test that functionality independently. This can make development and testing easier, but it can also make your application more flexible and easier to extend in the future. The benefit of the modular approach is that it can make your overall application architecture more flexible and maintainable because it allows you to break your application into manageable pieces. Each piece encapsulates specific functionality, and each piece is integrated through clear but loosely coupled communication channels.
+另一方面，模块化应用程序方法可以帮助您识别应用程序的大规模功能区域，并允许您独立开发和测试该功能。这可以使开发和测试更容易，但也可以使您的应用程序更灵活，更容易在将来扩展。模块化方法的好处是，它可以使整个应用程序体系结构更加灵活和可维护，因为它允许您将应用程序分解为可管理的部分。每个部分都封装了特定的功能，每个部分都通过清晰但松散耦合的通信渠道进行集成。
 
-## Prism's Support for Modular Application Development
+## Prism 对模块化应用开发的支持
 
-Prism provides support for modular application development and for run-time module management within your application. Using Prism's modular development functionality can save you time because you don't have to implement and test your own modularity framework. Prism supports the following modular application development features:
+Prism 为模块化应用程序开发和应用程序中的运行时模块管理提供支持。使用 Prism 的模块化开发功能可以节省您的时间，因为您不必实施和测试自己的模块化框架。Prism 支持以下模块化应用程序开发功能：
 
-- A module catalog for registering named modules and each module's location; you can create the module catalog in the following ways:
-  - By defining modules in code or Extensible Application Markup Language (XAML)
-  - By discovering modules in a directory so you can load all your modules without explicitly defining in a centralized catalog
-  - By defining modules in a configuration file
-  - Declarative metadata attributes for modules to support initialization mode and dependencies
-- For module loading:
-  - Dependency management, including duplicate and cycle detection to ensure modules are loaded in the correct order and only loaded and initialized once
-  - On-demand and background downloading of modules to minimize application start-up time; the rest of the modules can be loaded and initialized in the background or when they are required
-- Integration with dependency injection containers to support loose coupling between modules
+- 用于注册命名模块和每个模块位置的模块目录;您可以通过以下方式创建模块目录：
+  - 通过在代码或可扩展应用程序标记语言 （XAML） 中定义模块
+  - 通过发现目录中的模块，这样您就可以加载所有模块，而无需在集中式目录中显式定义
+  - 通过在配置文件中定义模块
+  - 模块的声明性元数据属性，以支持初始化模式和依赖项
+- 对于模块加载：
+  - 依赖关系管理，包括重复和周期检测，以确保模块以正确的顺序加载，并且只加载和初始化一次
+  - 模块的按需和后台下载，以最大限度地减少应用程序启动时间;其余模块可以在后台或需要时加载和初始化
+- 与依赖注入容器集成，支持模块之间的松耦合
 
-## Core Concepts
+## 核心概念
 
-This section introduces the core concepts related to modularity in Prism, including the ```IModule``` interface, the module loading process, the module catalog, communicating between modules, and dependency injection containers.
+本节介绍 Prism 中与模块化相关的核心概念，包括 ```IModule``` 接口、模块加载过程、模块目录、模块之间的通信以及依赖注入容器。
 
-### IModule: The Building Block of Modular Applications
+### IModule：模块化应用程序的构建块
 
-A module is a logical collection of functionality and resources that is packaged in a way that can be separately developed, tested, deployed, and integrated into an application. A package can be one or more assemblies. Each module has a central class that is responsible for initializing the module and integrating its functionality into the application. That class implements the ```IModule``` interface.
+模块是功能和资源的逻辑集合，其打包方式可以单独开发、测试、部署和集成到应用程序中。包可以是一个或多个程序集。每个模块都有一个中心类，该类负责初始化模块并将其功能集成到应用程序中。该类实现 ```IModule``` 接口.
 
-_**Note:** The presence of a class that implements the ```IModule``` interface is enough to identify the package as a module._
+_**注意:** 一个实现了  ```IModule``` 接口的类的存在就足以将该包识别为一个模块。_
 
 The ```IModule``` interface has two methods, named ```OnInitialized``` and ```RegisterTypes```. Both take a reference to the dependency injection container as a parameter. When a module is loaded into the application, ```RegisterTypes``` is called first and should be used to register any services or functionality that the module implements. Next the ```OnInitialized``` method is called. It is here that things like view registrations or any other module initialization code should be performed.
 

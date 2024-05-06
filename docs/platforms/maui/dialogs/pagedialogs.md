@@ -1,7 +1,3 @@
----
-uid: Platforms.Maui.Dialogs.PageDialogs
----
-
 # Using the Page Dialog Service
 
 Displaying an alert or asking a user to make a choice is a common UI task. .NET MAUI has 3 methods on the Page class for interacting with the user via a pop-up: DisplayAlert, DisplayActionSheet, & Prompt.  Prism provides a single **IPageDialogService** that abstracts away the .NET MAUI Page object dependency required for these actions and keeps your ViewModels clean and testable.  Simply request this service via the constructor of your ViewModel, and call either the DisplayAlert, or DisplayActionSheet to invoke the desired notification.

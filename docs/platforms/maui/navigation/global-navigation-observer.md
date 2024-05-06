@@ -1,7 +1,3 @@
----
-uid: Platforms.Maui.Navigation.GlobalNavigationRequest
----
-
 # Global NavigationRequest Event
 
 Out of the Box Prism's PageNavigationService (the default implementation of the `INavigationService`) is configured to publish events with the `IEventAggregator` when one of it's Navigation methods `NavigateAsync`, `GoBackAsync`, or `GoBackToRootAsync` are called. When it has completed, the event will fire giving you an opportunity to globally monitor these requests. What you do with the context is ultimately up to you, however it is a great place to handle Navigation Exceptions at a global level.

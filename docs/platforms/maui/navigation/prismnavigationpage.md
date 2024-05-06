@@ -1,7 +1,3 @@
----
-uid: Platforms.Maui.Navigation.PrismNavigationPage
----
-
 # PrismNavigationPage
 
 The NavigationPage is a unique element in .NET MAUI (and Xamarin.Forms) as it is the single Page that is capable of independently Popping Pages off of the Navigation Stack thus bypassing the NavigationService. In Prism.Maui we have taken some lessons from Prism.Forms and made it easier to ensure that the NavigationService is used to navigate between Pages.

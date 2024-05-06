@@ -1,11 +1,10 @@
-# Handling Resolution Errors
+# 处理解析错误
 
-> [!NOTE]
-> This feature was introduced in Prism 8 and does not apply if your app is targeting an earlier version
+?> 此功能是在 Prism 8 中引入的，如果您的应用以早期版本为目标平台，则此功能不适用
 
-Exceptions happen for a variety of reasons. Some common errors developers run into is a Service that was not registered or invalid XAML that generates an Exception when the View is resolved. The Prism Container Extensions now are very intentional about catching any underlying container exception and throwing a `ContainerResolutionException`. The goal of the ContainerResolutionException is simple... shorten the dev loop by giving you the information you need to diagnose and fix problems in your code.
+由于各种原因，会发生异常。开发人员遇到的一些常见错误是服务未注册或无效的 XAML，在解析视图时生成异常。Prism 容器扩展现在非常有意捕获任何底层容器异常并抛出 `ContainerResolutionException` 。ContainerResolutionException 的目标很简单...通过提供诊断和修复代码中问题所需的信息来缩短开发循环。
 
-The `ContainerResolutionException` contains a number of constant messages like `MissingRegistration`, `CannotResolveAbstractType`, or `CyclicalDependency`. In addition to those constants, it exposes properties for the ServiceName and/or ServiceType that was being resolved.
+包含 `ContainerResolutionException` 许多常量消息，如 `MissingRegistration` 、 `CannotResolveAbstractType` 或 `CyclicalDependency` 。除了这些常量之外，它还公开正在解析的 ServiceName 和/或 ServiceType 的属性。
 
 ```csharp
 public class ModuleA : IModule
@@ -19,7 +18,7 @@ public class ModuleA : IModule
 }
 ```
 
-Looking at the above code snippet we can see that I have a service I'm injecting into ModuleA as a hard dependency. Unfortunately I forgot to register it. We can of course hook into the LoadModuleCompleted event in the ModuleManager so that we can see what happens when the modules get loaded like shown here:
+查看上面的代码片段，我们可以看到我有一个服务作为硬依赖项注入到 ModuleA 中。不幸的是，我忘了注册它。我们当然可以挂接到 ModuleManager 中的 LoadModuleCompleted 事件，这样我们就可以看到加载模块时会发生什么，如下所示：
 
 ```csharp
 protected override void InitializeModules()
@@ -43,7 +42,7 @@ protected virtual void LoadModuleCompleted(IModuleInfo moduleInfo, Exception err
 }
 ```
 
-In this example, I'm going to see that the error is a ContainerResolutionException and that the ServiceType is ModuleA with no ServiceName. But that doesn't really give me quite enough information. Luckily the `ContainerResolutionException` also has a `GetErrors()` method on it that provides us the ability to see what the type is and what the error is:
+在此示例中，我将看到错误是 `ContainerResolutionException`，并且 ServiceType 是没有 ServiceName 的 ModuleA。但这并没有真正给我足够的信息。幸运的是， ContainerResolutionException 它也有一个 `GetErrors()` 方法，使我们能够查看类型是什么以及错误是什么：
 
 ```csharp
 protected virtual void LoadModuleCompleted(IModuleInfo moduleInfo, Exception error, bool isHandled)
@@ -60,7 +59,7 @@ protected virtual void LoadModuleCompleted(IModuleInfo moduleInfo, Exception err
 }
 ```
 
-When we run this we should see something like the following output:
+当我们运行它时，我们应该看到如下输出：
 
 ```text
 Error with: MyProject.Services.IServiceIForgotToRegister

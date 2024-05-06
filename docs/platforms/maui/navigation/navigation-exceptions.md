@@ -1,7 +1,3 @@
----
-uid: Platforms.Maui.Navigation.NavigationExceptions
----
-
 # Navigation Exceptions
 
 The NavigationService makes every effort to capture Exceptions making it safe to call the NavigationService without having to wrap every Navigation call in a try/catch block. When exceptions are encountered, the NavigationService will wrap the caught exception in a NavigationException. The NavigationException is meant to help the debug process by providing context around why the Navigation Failed.

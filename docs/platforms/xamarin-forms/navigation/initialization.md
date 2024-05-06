@@ -1,6 +1,3 @@
----
-uid: Platforms.XamarinForms.Navigation.ViewModelInitialization
----
 # Initializing your ViewModels
 
 Initializing your ViewModels is considered a ONE TIME task. This is only done after the ViewModel Page has been created. You should never place logic inside of the Initialization methods which you expect to execute each time the View is navigated to such as when you Navigate back from another Page.

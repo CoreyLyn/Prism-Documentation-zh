@@ -1,7 +1,3 @@
----
-uid: Platforms.Maui.Behaviors.BehaviorBase
----
-
 # BehaviorBase&lt;T&gt;
 
 The Prism team long ago felt that it was a royal pain for people having to re-implement something that was in every single sample project released by the Xamarin Team. While this Base Behavior does indeed have some limitations that you should be aware of, it is a great starting point for many Behaviors you may need to create.

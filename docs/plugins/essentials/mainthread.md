@@ -1,7 +1,3 @@
----
-uid: Plugins.Essentials.MainThread
----
-
 # Main Thread
 
 There are a variety of reasons why you may need to force the execution of a block of code on the MainThread. Some care should be taken when executing on the MainThread as this is used by the UI and long running processes on the UI Thread may result in "Locking" the UI, leading to a poor user experience and bad app store reviews.

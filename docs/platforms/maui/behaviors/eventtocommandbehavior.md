@@ -1,7 +1,3 @@
----
-uid: Platforms.Maui.Behaviors.EventToCommandBehavior
----
-
 # Using the EventToCommandBehavior
 
 The `EventToCommandBehavior` class provides a convenient way to, in XAML, "bind" events to `ICommand` according to MVVM paradigm to avoid code behind.

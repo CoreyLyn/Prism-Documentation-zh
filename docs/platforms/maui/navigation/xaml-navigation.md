@@ -1,7 +1,3 @@
----
-uid: Platforms.Maui.Navigation.XamlNavigation
----
-
 # XAML Navigation
 
 XAML Navigation is a favorite feature for many Prism developers. This gives you the ability to reduce the amount of code you need to write in your ViewModel and focus on simplifying your code by simply enabling Navigation on an as needed basis.

@@ -1,7 +1,3 @@
----
-uid: Platforms.Maui.Navigation.PageNavigation
----
-
 # Page Navigation
 
 For those who may be familiar with Prism.Forms this is perhaps one of the most beloved features of Prism. Prism's INavigationService provides us the ability to easily navigate between pages with a powerful understanding of URI's. This allows us to inject parameters into the URI's that will be passed to specific Pages, overload query parameters, and even control the behavior of the navigation such as whether or not to animate the transition or navigate modally at a specific URI segment.

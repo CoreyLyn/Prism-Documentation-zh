@@ -1,21 +1,23 @@
-# Dependency Injection - Supplement
+# 依赖注入 - 补充
 
-As you may already realize, Dependency Injection is a first class citizen in .NET MAUI. As you might expect from a Microsoft product, they have adopted the Microsoft.Extensions.DependencyInjection package. Prism however going back to Prism 7.0 continues to rely on the Prism Ioc Abstractions for the `IContainerRegistry` and `IContainerProvider`.
+您可能已经意识到，依赖注入是 .NET MAUI 中的一等公民。正如您对Microsoft产品所期望的那样，他们采用了Microsoft.Extensions.DependencyInjection包。 然而，从Prism 7.0开始，Prism继续依赖于Prism IoC抽象，使用 `IContainerRegistry` 和 `IContainerProvider`.
 
-## IServiceCollection Extensions
+## IServiceCollection 扩展
 
-Despite the fact that you may want to use a container other than Microsoft.Extensions.DependencyInjection, there are many times in which you may want to leverage the registration extensions that are provided by packages that use Microsoft.Extensions.DependencyInjection. In Prism 9.0 we have added a core reference to the Microsoft.Extensions.DependencyInjection.Abstractions allowing us to ensure that all container implementations can support these extensions natively.
+尽管您可能希望使用 Microsoft.Extensions.DependencyInjection 以外的容器，但很多时候您可能希望利用使用 Microsoft.Extensions.DependencyInjection 的包提供的注册扩展。在 Prism 9.0 中，我们添加了对 Microsoft.Extensions.DependencyInjection.Abstractions 的核心引用，使我们能够确保所有容器实现都可以本机支持这些扩展。
 
 ## F.A.Q.
 
-Q. Is it EntityFrameworkCore or the Microsoft.Extensions.Http HttpClientFactory, or the Microsoft..... supported?
-A. Short answer is maybe. These extension may work just fine, may need some tweaking, or you may want to go to GitHub, copy the Registration Extension and alter it to work for you in your project. Remember that the extensions written for registering these services were built around developers developing for AspNetCore. This is a very different environment than the one that we are building for. In some cases such as Entity Framework Core you may find that you need to change the default Lifetime of the Service. For example EntityFrameworkCore will register your DbContext as a Scoped Service. This make perfect sense in a WebApi, however if you are building a Blazor Application you may find yourself hitting several errors because various components are trying to use the same instance of the DbContext at the same time. You may find yourself hitting the same exact issue if you are using Prism Regions in which case you would need to change the default lifetime to Transient. Each library that you're trying to pull in built around Microsoft.Extensions.DependencyInjection may or may not have quirks that show up because they weren't originally built with the understanding of running in a Mobile app.
+问题： 是否支持 EntityFrameworkCore 或者 the Microsoft.Extensions.Http HttpClientFactory, 又或者 Microsoft..... ?
 
-Q. What is a Scoped Service? What does it mean in a Prism.Maui app?
-A. Scoped Services can be a bit of an advanced topic. In short, they provide you a middle ground between a Transient and a Singleton in which a Service resolve multiple instances throughout the lifecycle of the application, while providing the same exact instance to dependencies within the Scope. For the context of a Prism.Maui application, Scoped Services resolve the same instance of services such as the INavigationService within the scope of a given Page. This means that whether the INavigationService is injected into the Page itself, the ViewModel, some service you have a dependency on, or even the ViewModel of a Region dynamically created later during the Page's lifecycle, you will always be able to access the same instance of the INavigationService. However as the scope of the next page is different, the instance of the INavigationService will be different. You can utilize scoped services within your application in the same way.
+答： 简短的回答是也许。这些扩展可能工作得很好，可能需要一些调整，或者你可能想去 GitHub，复制注册扩展并修改它以在你的项目中为你工作。请记住，为注册这些服务而编写的扩展是围绕为 AspNetCore 开发的开发人员构建的。这是一个与我们正在构建的环境截然不同的环境。在某些情况下，例如 Entity Framework Core，您可能会发现需要更改服务的默认生存期。例如，EntityFrameworkCore 会将 DbContext 注册为作用域服务。这在 WebAPI 中非常有意义，但是，如果正在生成 Blazor 应用程序，可能会发现自己遇到多个错误，因为各种组件正在尝试同时使用 DbContext 的同一实例。如果您使用的是 Prism 区域，您可能会发现自己遇到了同样的问题，在这种情况下，您需要将默认生存期更改为瞬态。你尝试拉入的每个库都是围绕 Microsoft.Extensions.DependencyInjection 构建的，可能会也可能不会出现怪癖，因为它们最初不是在理解在移动应用中运行的情况下构建的。
 
-## Further Reading
+问题： 什么是作用域服务？这在 Prism.Maui 应用程序中是什么意思?
 
-If you have additional questions about Dependency Injection, please be sure to check out the full Dependency Injection Topic
+答：作用域服务可能是一个高级主题。简言之，它们为您提供了瞬态和单一实例之间的中间地带，其中服务在应用程序的整个生命周期中解析多个实例，同时为作用域中的依赖项提供相同的确切实例。对于 Prism.Maui 应用程序的上下文，作用域服务解析给定页面范围内的相同服务实例，例如 INavigationService。这意味着，无论 INavigationService 是注入到 Page 本身、ViewModel、您依赖的某些服务，甚至是 Page 生命周期后期动态创建的区域的 ViewModel 中，您始终能够访问 INavigationService 的同一实例。但是，由于下一页的范围不同，因此 INavigationService 的实例也会有所不同。您可以以相同的方式在应用程序中使用作用域内的服务。
 
-- [Dependency Injection](xref:DependencyInjection.GettingStarted)
+## 延伸阅读
+
+如果您对依赖注入有其他疑问，请务必查看完整的依赖注入主题
+
+- [依赖注入（Dependency Injection）](xref:DependencyInjection.GettingStarted)

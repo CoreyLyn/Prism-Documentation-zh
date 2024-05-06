@@ -1,6 +1,3 @@
----
-uid: Platforms.XamarinForms.Behaviors.EventToCommand
----
 # Using the EventToCommandBehavior
 
 The `EventToCommandBehavior` class provides a convenient way to, in XAML, "bind" events to `ICommand` according to MVVM paradigm to avoid code behind.

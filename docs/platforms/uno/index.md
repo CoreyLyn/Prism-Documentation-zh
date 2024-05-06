@@ -1,7 +1,3 @@
----
-uid: Platforms.UnoPlatform.GettingStarted
----
-
 # Getting Started
 
 ## Configuring the Window

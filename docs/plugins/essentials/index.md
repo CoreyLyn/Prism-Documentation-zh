@@ -1,7 +1,3 @@
----
-uid: Plugins.Essentials.GettingStarted
----
-
 # Getting Started
 
 Prism.Plugin.Essentials is built around the idea that you should be able to have an abstraction layer for your applications that makes your code more portable with the ability to adapt over time. Whether you want to take code from your legacy WPF application and bring it across to .NET MAUI or Uno Platform or migrate from one platform to another.

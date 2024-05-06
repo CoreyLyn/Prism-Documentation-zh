@@ -1,7 +1,3 @@
----
-uid: Platforms.Uno.Extensions
----
-
 # Uno.Extensions Support
 
 Prism 9 for Uno.WinUI makes some opinionated choices that we feel ultimately enhances the development experience for those building apps with Uno Platform. One of the choices that we've made is to take a dependency on `Uno.Extensions.Hosting.WinUI`. As a result this makes it easier for Uno developers building apps with Prism to opt into the Uno.Extensions model for things like App Configuration, Http/Rest Clients, or even Authentication.

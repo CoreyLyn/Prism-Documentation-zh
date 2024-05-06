@@ -1,7 +1,3 @@
----
-uid: Platforms.Maui.Migrating
----
-
 # Migrating from Prism.Forms
 
 With more than 5 million downloads Prsim.Forms has been an amazingly popular choice for Xamarin.Forms developers to build and develop their apps. While many features and API's remain the same or very similar there are some differences which you will need to be aware of before making an upgrade. The bulk of these changes are directly related to the startup/bootstrapping process. In Prism.Forms, the startup process was handled by PrismApplication as Xamarin.Forms itself had no real concept of Dependency Injection. 

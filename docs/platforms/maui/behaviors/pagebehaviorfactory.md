@@ -1,7 +1,3 @@
----
-uid: Platforms.Maui.Behaviors.PageBehaviorFactory
----
-
 # PageBehaviorFactory
 
 For those coming from Prism.Forms who may have had some previous knowledge of the PageBehaviorFactory, this has been completely re-imagined for Prism.Maui. You can no longer override Prism's Page Behaviors, however it is extremely easy to apply any Behavior to pages in your application and get full Dependency Injection support along the way.

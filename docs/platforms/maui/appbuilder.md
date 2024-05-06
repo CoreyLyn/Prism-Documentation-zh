@@ -1,7 +1,3 @@
----
-uid: Platforms.Maui.AppBuilder
----
-
 # App Builder
 
 .NET MAUI adopts a pattern that we see commonly throughout modern .NET Applications with a Builder Pattern. Prism.Maui adopts this as part of the natural pattern for MAUI Developers by first exposing an extension method on the `MauiAppBuilder`. To get started we simply need to include `UsePrism` after the `UseMauiApp` call on the `MauiAppBuilder`.

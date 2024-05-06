@@ -1,7 +1,3 @@
----
-uid: Platforms.Maui.Navigation.NavigationBuilder
----
-
 # Navigation Builder
 
 The NavigationBuilder is new to Prism.Maui and is meant to solve a number of issues that developers run into. While Prism's NavigationService will always continue to be URI based, this can create issues for very complex Deep Links and can cause issues for developers who are doing some string interpolation.

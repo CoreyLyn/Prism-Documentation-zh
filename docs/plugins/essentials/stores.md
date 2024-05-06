@@ -1,7 +1,3 @@
----
-uid: Plugins.Essentials.Stores
----
-
 # Stores
 
 The concept of Stores is borrowed from one of our favorite .NET Libraries [Shiny.NET](https://shinylib.net/), however we've made a few enhancements and provided implementations for all of your Prism applications. One of the root concepts of Stores is that the store implementation should be decoupled from any logic around how it is used. This means that unit testing is particularly easy.

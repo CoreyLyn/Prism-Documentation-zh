@@ -1,24 +1,23 @@
-# Prism Container Extensions
+# Prism 容器扩展
 
-Prism's out of the box registration methods cover you for most of your dependency injection scenarios. In fact there are many projects which will never need to do more than simply register a service as either a Transient or a Singleton in addition to registering Pages for Navigation. There are however times where you may need to do things like:
+Prism 的开箱即用注册方法涵盖了大多数依赖项注入方案。事实上，除了注册 Pages for Navigation 之外，还有很多项目只需要简单地将服务注册为 Transient 或 Singleton 之外。但是，有时您可能需要执行以下操作：
 
-- Register a type using a factory method
-- Register a single implementing type for more than one service
-  - This may be done simply with Prism if you are registering it as a Transient, however the Container Extensions allow you to do this with a single line of code
-  - You may also have a need for the service to be a singleton and use that same instance regardless of which interface was resolved.
+- 使用工厂方法注册类型
+- 为多个服务注册单个实现类型
+  - 如果您将 Prism 注册为 Transient，则可以简单地使用 Prism 完成此操作，但是容器扩展允许您使用一行代码来执行此操作
+  - 您可能还需要将服务设置为单一实例，并且无论解析哪个接口都使用同一实例。
 
-In addition to this you may want to take advantage of extended version of Prism.Forms from the Container Extension as this provides more debugging hooks built in by default to give you better context around uncaught exceptions encountered in your application. For more information be sure to check out the [Prism.Container.Extensions](https://github.com/dansiegel/Prism.Container.Extensions) repo.
+除此之外，您可能还希望利用容器扩展中 Prism.Forms 的扩展版本，因为它默认提供了更多内置的调试钩子，以便为应用程序中遇到的未捕获异常提供更好的上下文。有关详细信息，请务必查看 [Prism.Container.Extensions](https://github.com/dansiegel/Prism.Container.Extensions) 存储库.
 
-## Support for Shiny Lib
+## 支持 Shiny Lib
 
-One of the best new libraries for Xamarin developers is without question the Shiny Library from Allan Ritchie. This provides a number of features from handling settings, determining whether you are connected to a network, background tasks, bluetooth and more. Shiny was built with Dependency Injection in mind from the start. This has a number of benefits including that it uses an interface based approach allowing you to mock any services from Shiny which you might inject into your ViewModels.
+毫无疑问，Xamarin 开发人员最好的新库之一是 Allan Ritchie 的 Shiny 库。这提供了许多功能，包括处理设置、确定您是否连接到网络、后台任务、蓝牙等。Shiny 从一开始就考虑到了依赖注入。这有很多好处，包括它使用基于接口的方法，允许您模拟 Shiny 中的任何服务，您可以将其注入 ViewModel。
 
-The one downside with Shiny is that it requires initialization before Xamarin.Forms or Prism have had a chance to initialize. This fundamentally changes the source of truth for your Dependency Injection. In order to properly combine both Prism and Shiny you will need to properly provide the DI container as the IServiceProvider that Shiny will use. The easiest way to do this is to use a container implementation from [Prism.Container.Extensions](https://github.com/dansiegel/Prism.Container.Extensions) along with the [Shiny.Prism](https://www.nuget.org/packages/Shiny.Prism) NuGet from the same repo.
+Shiny 的一个缺点是，它需要在 Xamarin.Forms 或 Prism 有机会初始化之前进行初始化。这从根本上改变了依赖注入的事实来源。为了正确组合 Prism 和 Shiny，需要正确提供 DI 容器作为 Shiny 将使用的 IServiceProvider。执行此操作的最简单方法是使用 [Prism.Container.Extensions](https://github.com/dansiegel/Prism.Container.Extensions) 中的容器实现以及同一存储库中的 [Shiny.Prism](https://www.nuget.org/packages/Shiny.Prism) NuGet。
 
-> [!NOTE]
-> If you use the Extended Forms packages (Prism.DryIoc.Forms.Extended or Prism.Unity.Forms.Extended) you should not use the Container specific packages from Prism (Prism.DryIoc.Forms or Prism.Unity.Forms) as the PrismApplication in those packages is already configured to use the proper PrismContainerExtension.
+?> 如果使用扩展表单包（Prism.DryIoc.Forms.Extended 或 Prism.Unity.Forms.Extended），则不应使用 Prism 中的容器特定包（Prism.DryIoc.Forms 或 Prism.Unity.Forms），因为这些包中的 PrismApplication 已配置为使用正确的 PrismContainerExtension。
 
-You may elect to use Prism.Forms directly with one of the Container Extensions packages. If you do so you will want to update your app as follows:
+您可以选择将 Prism.Forms 直接用于其中一个容器扩展包。如果这样做，您将需要更新您的应用，如下所示：
 
 ```cs
 public partial class App : PrismApplicationBase
@@ -28,7 +27,7 @@ public partial class App : PrismApplicationBase
 }
 ```
 
-Using the Startup base class in Shiny.Prism you will then simply provide the container extension as follows:
+使用 Shiny.Prism 中的 Startup 基类，只需提供容器扩展，如下所示：
 
 ```cs
 public class Startup : PrismStartup

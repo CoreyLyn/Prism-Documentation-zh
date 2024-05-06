@@ -1,6 +1,3 @@
----
-uid: Platforms.XamarinForms.Behaviors.PageBehaviorFactory
----
 # Page Behavior Factory
 
 There are many times where you may want to apply specific behaviors to pages universally. Internally Prism utilizes the IPageBehaviorFactory to apply Behaviors for supporting `IActiveAware` on the children of the `TabbedPage` `CarouselPage`, & `NavigationPage` as well as handling [`IPageLifecycleAware`](xref:Platforms.XamarinForms.PageLifecycle). In the event that there are custom behaviors which you would like to apply you can provide a custom implementation of the PageBehaviorFactory.

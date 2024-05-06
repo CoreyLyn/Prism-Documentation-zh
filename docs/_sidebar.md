@@ -42,11 +42,67 @@
         - [控制视图生命周期](navigation/regions/controlling-view-lifetime.md)
         - [导航 Journal](navigation/regions/navigation-journal.md)
   - 平台（Platforms）
+    - Maui
+      - [开始使用](platforms/maui/index.md)
+      - [从 Prism.Forms 迁移](platforms/maui/migrating.md)
+      - [PrismAppBuilder](platforms/maui/appbuilder.md)
+      - AppModel
+        - [IPageLifecycleAware](platforms/maui/appmodel/pagelifecycleaware.md)
+      - Behaviors
+        - [介绍](platforms/maui/behaviors/index.md)
+        - [BehaviorBase<T>](platforms/maui/behaviors/behaviorbase.md)
+        - [EventToCommandBehavior](platforms/maui/behaviors/eventtocommandbehavior.md)
+        - [PageBehaviorFactory](platforms/maui/behaviors/pagebehaviorfactory.md)
+      - Dialogs
+        - [开始使用](platforms/maui/dialogs/index.md)
+        - [IPageDialogService](platforms/maui/dialogs/pagedialogs.md)
+      - Navigation
+        - [介绍](platforms/maui/navigation/index.md)
+        - [Page Navigation](platforms/maui/navigation/page-navigation.md)
+        - [NavigationBuilder](platforms/maui/navigation/navigation-builder.md)
+        - [理解INavigationResult](platforms/maui/navigation/navigation-result.md)
+        - [NavigationExceptions](platforms/maui/navigation/navigation-exceptions.md)
+        - [全局 Navigation Observer](platforms/maui/navigation/global-navigation-observer.md)
+        - [XAML Navigation](platforms/maui/navigation/xaml-navigation.md)
+    - Uno Platform
+      - [开始使用](platforms/uno/index.md)
+      - [Uno 扩展](platforms/uno/extensions.md)
     - Wpf
         - [介绍](platforms/wpf/introduction.md)
         - [开始使用](platforms/wpf/getting-started.md)
         - [视图组成](platforms/wpf/view-composition.md)
         - 交互
           - [将事件绑定到命令](platforms/wpf/interactivity/event-to-command.md)
+    - Xamarin.Forms
+      - [创建你的第一个应用](platforms/xamarin-forms)
+      - Behaviors
+        - [使用 Behaviors](platforms/xamarin-forms/behaviors/index.md)
+        - [EventToCommandBehavior](platforms/xamarin-forms/behaviors/eventtocommandbehavior.md)
+        - [PageBehaviorFactory](platforms/xamarin-forms/behaviors/page-behavior-factory.md)
+      - Dialogs
+        - [Dialogs](platforms/xamarin-forms/dialogs/index.md)
+        - [Page Dialog Service](platforms/xamarin-forms/dialogs/page-dialog-service.md)
+        - [Dialog Service](platforms/xamarin-forms/dialogs/dialog-service.md)
+        - [Styling Dialogs](platforms/xamarin-forms/dialogs/styling-dialogs.md)
+      - Navigation
+        - [Navigation 基础](platforms/xamarin-forms/navigation/navigation-basics.md)
+        - [传递参数](platforms/xamarin-forms/navigation/passing-parameters.md)
+        - [确认 Navigation](platforms/xamarin-forms/navigation/confirming-navigation.md)
+        - [深度链接](platforms/xamarin-forms/navigation/deep-linking.md)
+        - [使用 MasterDetailPages](platforms/xamarin-forms/navigation/working-with-masterdetailpages.md)
+        - [使用 NavigationPages](platforms/xamarin-forms/navigation/working-with-navigationpages.md)
+        - [使用 TabbedPages](platforms/xamarin-forms/navigation/working-with-tabbedpages.md)
+        - [XAML Navigation](platforms/xamarin-forms/navigation/xaml-navigation.md)
+      - [应用程序生命周期](platforms/xamarin-forms/application-lifecycle.md)
+      - [页面生命周期](platforms/xamarin-forms/page-lifecycle.md)
+      - 其他平台
+        - [GTK](platforms/xamarin-forms/platform-reference/gtk.md)
   - 插件（Plugins）
-    - 基本会话
+    - 概要
+      - [开始使用](plugins/essentials/index.md)
+      - [应用上下文](plugins/essentials/appcontext.md)
+      - [连接](plugins/essentials/connectivity.md)
+      - [文件系统](plugins/essentials/filesystem.md)
+      - [主线程](plugins/essentials/mainthread.md)
+      - [商店](plugins/essentials/stores.md)
+    - [弹出窗口](plugins/popups.md)
