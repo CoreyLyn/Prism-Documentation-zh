@@ -38,7 +38,7 @@ Prism 为模块化应用程序开发和应用程序中的运行时模块管理�
 
 _**注意:** 一个实现了  ```IModule``` 接口的类的存在就足以将该包识别为一个模块。_
 
-The ```IModule``` interface has two methods, named ```OnInitialized``` and ```RegisterTypes```. Both take a reference to the dependency injection container as a parameter. When a module is loaded into the application, ```RegisterTypes``` is called first and should be used to register any services or functionality that the module implements. Next the ```OnInitialized``` method is called. It is here that things like view registrations or any other module initialization code should be performed.
+```IModule``` i接口有两个方法，分别是 ```OnInitialized``` 和 ```RegisterTypes```。两者都引用依赖注入容器作为参数。当模块加载到应用程序中时， ```RegisterTypes``` 首先调用，并应用于注册模块实现的任何服务或功能。接下来，调用该 ```OnInitialized``` 方法。在这里，应该执行视图注册或任何其他模块初始化代码之类的操作。
 
 ```cs
 public class MyModule : IModule
@@ -60,133 +60,133 @@ public class MyModule : IModule
 }
 ```
 
-### Module Lifecycle
+### 模块生命周期
 
-The module loading process in Prism includes the following sequence:
+Prism 中的模块加载过程包括以下顺序：
 
-- **Registering** Modules are created by implementing the IModule interface inside of a class.
-- **Discovering modules**. The modules to be loaded at run-time for a particular application are defined in a Module catalog. The catalog contains information about the modules to be loaded, such as their location, and the order in which they are to be loaded.
-- **Loading modules**. The assemblies that contain the modules are loaded into memory.
-- **Initializing modules**. The modules are then initialized. This means creating instances of the module class and calling the ```RegisterTypes``` and ```OnInitialized``` methods on them via the ```IModule``` interface.
+- **注册** 模块是通过在类中实现 IModule 接口来创建的。
+- **发现模块**。 要在运行时为特定应用程序加载的模块在模块目录中定义。该目录包含有关要加载的模块的信息，例如它们的位置以及要加载的顺序。
+- **加载模块**。 包含模块的程序集将加载到内存中。
+- **初始化模块**。 然后初始化模块。这意味着创建模块类的实例并调用其中的 ```RegisterTypes``` 和 ```OnInitialized``` 方法通过 ```IModule``` 接口。
 
 
-### Module Catalog
+### 模块目录
 
-The ```ModuleCatalog``` holds information about the modules that can be used by the application. The catalog is essentially a collection of ```ModuleInfo``` classes. Each module is described in a ```ModuleInfo``` class that records the name, type, and location, among other attributes of the module. There are several typical approaches to filling the **ModuleCatalog** with **ModuleInfo** instances:
+```ModuleCatalog``` 包含有关应用程序可以使用的模块的信息。目录实质上是类的 ```ModuleInfo``` 集合。每个模块都在一个 ```ModuleInfo``` 类中描述，该类记录了模块的名称、类型和位置以及其他属性。有几种典型的方法可以用 **ModuleInfo** 实例填充 **ModuleCatalog** :
 
-- Registering modules in code
-- Registering modules in XAML
-- Registering modules in a configuration file
-- Discovering modules in a local directory on disk
+- 在代码中注册模块
+- 在 XAML 中注册模块
+- 在配置文件中注册模块
+- 寻找本地磁盘目录中的模块
 
-The registration and discovery mechanism you should use depends on what your application needs. Using a configuration file or XAML file allows your application to not require references to the modules. Using a directory can allow an application to discover modules without having to specify them in a file.
+应使用的注册和发现机制取决于应用程序的需求。使用配置文件或 XAML 文件，应用程序不需要引用模块。使用目录可以允许应用程序发现模块，而无需在文件中指定它们。
 
-### Controlling When to Load a Module
+### 控制何时加载模块
 
-Prism applications can initialize modules as soon as possible, known as "when available," or when the application needs them, known as "on-demand." Consider the following guidelines for loading modules:
+Prism 应用程序可以尽快初始化模块（称为“可用时”），或者在应用程序需要它们时（称为“按需”）。请考虑以下加载模块的准则：
 
-- Modules required for the application to run must be loaded with the application and initialized when the application runs.
-- Modules containing features that are rarely used (or are support modules that other modules optionally depend upon) can be loaded and initialized on-demand.
+- 应用程序运行所需的模块必须与应用程序一起加载，并在应用程序运行时初始化。
+- 包含很少使用的功能的模块（或者是其他模块可选依赖的支持模块）可以按需加载和初始化。
 
-Consider how you are partitioning your application, common usage scenarios and application start-up time for determining how to configure your app for initialization.
+考虑如何对应用程序进行分区、常见使用方案和应用程序启动时间，以确定如何配置应用程序进行初始化。
 
-### Integrate Modules With The Application
+### 将模块与应用程序集成
 
-Each of the ```Prism.DryIoc.[Platform]``` and ```Prism.Unity.[Platform]``` assemblies provide an ```Application``` based class that is used as the base class for the App class. Override the virtual method ```CreateModuleCatalog``` to create the desired type of module catalog.
+每个 ```Prism.DryIoc.[Platform]``` 和 ```Prism.Unity.[Platform]``` 程序集都提供一个 ```Application``` 基类，该类用作 App 类的基类。重写虚拟方法 ```CreateModuleCatalog``` 以创建所需类型的模块目录。
 
-For each of the modules in the app, implement the ```IModuleInfo``` interface to register module types and services. The following are common things to do to when integrating a module into the app:
+于应用中的每个模块，实现用于注册模块类型和服务的 ```IModuleInfo``` 接口。以下是将模块集成到应用中的常见操作：
 
-- Add the module's views to the application's navigation structure. This is common when building composite UI applications using view discovery or view injection.
-- Subscribe to application level events or services.
-- Register shared services with the application's dependency injection container.
+- 将模块的视图添加到应用程序的导航结构中。在使用视图发现或视图注入生成复合 UI 应用程序时，这很常见。
+- 订阅应用程序级事件或服务。
+- 将共享服务注册到应用程序的依赖项注入容器。
 
-### Communicate Between Modules
+### 模块之间的通信
 
-Even though modules should have low coupling between each other, it is common for modules to communicate with each other. There are several loosely coupled communication patterns, each with their own strengths. Typically, combinations of these patterns are used to create the resulting solution. The following are some of these patterns:
+尽管模块之间应该具有低耦合，但模块之间相互通信是很常见的。有几种松散耦合的沟通模式，每种模式都有自己的优势。通常，这些模式的组合用于创建生成的解决方案。以下是其中一些模式：
 
-- **Loosely coupled events**. A module can broadcast that a certain event has occurred. Other modules can subscribe to those events so they will be notified when the event occurs. Loosely coupled events are a lightweight manner of setting up communication between two modules; therefore, they are easily implemented. However, a design that relies too heavily on events can become hard to maintain, especially if many events have to be orchestrated together to fulfill a single task. In that case, it might be better to consider a shared service.
-- **Shared services**. A shared service is a class that can be accessed through a common interface. Typically, shared services are found in a shared assembly and provide system-wide services, such as authentication, logging, or configuration.
-- **Shared resources**. If you do not want modules to directly communicate with each other, you can also have them communicate indirectly through a shared resource, such as a database or a set of web services.
+- **松散耦合事件**。一个模块可以广播某个事件已经发生。其他模块可以订阅这些事件，以便在事件发生时收到通知。松散耦合事件是在两个模块之间建立通信的轻量级方式;因此，它们很容易实现。但是，过于依赖事件的设计可能变得难以维护，尤其是在必须将许多事件编排在一起才能完成单个任务时。在这种情况下，最好考虑共享服务。
+- **共享服务**。共享服务是可以通过公共接口访问的类。通常，共享服务位于共享程序集中，并提供系统范围的服务，例如身份验证、日志记录或配置。
+- **共享资源**。如果不希望模块之间直接通信，也可以让它们通过共享资源（如数据库或一组 Web 服务）间接通信。
 
-### Dependency Injection and Modular Applications
+### 依赖注入和模块化应用程序
 
-Containers like **Unity** and **DryIoc** allow you to easily use Inversion of Control (IoC) and Dependency Injection, which are powerful design patterns that help to compose components in a loosely-coupled fashion. It allows components to obtain references to the other components that they depend on without having to hard code those references, thereby promoting better code re-use and improved flexibility. Dependency injection is very useful when building a loosely coupled, modular application. Prism is designed to be agnostic about the dependency injection container used to compose components within an application.
+**Unity** 和 **DryIoc** 等容器允许您轻松使用控制反转 （IoC） 和依赖关系注入，它们是强大的设计模式，有助于以松散耦合的方式组合组件。它允许组件获取对它们所依赖的其他组件的引用，而无需对这些引用进行硬编码，从而促进更好的代码重用和更高的灵活性。在构建松散耦合的模块化应用程序时，依赖注入非常有用。Prism 被设计为与用于在应用程序中组合组件的依赖注入容器无关。
 
-Regardless of which of the three containers is chosen, Prism will use the container to construct and initialize each of the modules so that they remain loosely coupled.
+无论选择三个容器中的哪一个，Prism 都将使用该容器来构建和初始化每个模块，以便它们保持松散耦合。
 
-## Key Decisions
+## 关键决策
 
-The first decision you will make is whether you want to develop a modular solution. There are numerous benefits of building modular applications as discussed in the previous section, but there is a commitment in terms of time and effort that you need to make to reap these benefits. If you decide to develop a modular solution, there are several more things to consider:
+您将做出的第一个决定是是否要开发模块化解决方案。如上一节所述，构建模块化应用程序有许多好处，但要获得这些好处，您需要付出时间和精力。如果您决定开发模块化解决方案，还需要考虑以下几点：
 
-- **Determine the framework you will use**. You can create your own modularity framework, use Prism, or another framework.
-- **Determine how to organize your solution**. Approach a modular architecture by defining the boundaries of each module, including what assemblies are part of each module. You can decide to use modularity to ease the development, as well as to have control over how the application will be deployed or if it will support a plug-in or extensible architecture.
-- **Determine how to partition your modules**. Modules can be partitioned differently based on requirements, for example, by functional areas, provider modules, development teams and deployment requirements.
-- **Determine the core services that the application will provide to all modules**. An example is that core services could be an error reporting service or an authentication and authorization service.
-- **If you are using Prism, determine what approach you are using to register modules in the module catalog**. For WPF, you can register modules in code, XAML, in a configuration file, or discovering modules in a local directory on disk.
-- **Determine your module communication and dependency strategy**. Modules will need to communicate with each other, and you will need to deal with dependencies between modules.
-- **Determine your dependency injection container**. Typically, modular systems require dependency injection, inversion of control, or service locator to allow the loose coupling and dynamic loading and creating of modules. Prism allows a choice between using Unity or DryIoc and provides libraries for Unity and DryIoc based applications.
-- **Minimize application startup time**. Think about on-demand and background downloading of modules to minimize application startup time.
-- **Determine deployment requirements**. You will need to think about how you intend to deploy your application.
+- **确定将使用的框架**。您可以创建自己的模块化框架，使用 Prism 或其他框架。
+- **确定如何组织解决方案**。通过定义每个模块的边界（包括每个模块的一部分）来接近模块化体系结构。您可以决定使用模块化来简化开发，并控制应用程序的部署方式或是否支持插件或可扩展体系结构。
+- **确定如何对模块进行分区**。模块可以根据需求进行不同的分区，例如，按功能区域、提供程序模块、开发团队和部署要求进行分区。
+- **确定应用程序将向所有模块提供的核心服务**。例如，核心服务可以是错误报告服务，也可以是身份验证和授权服务。
+- **如果您使用的是 Prism，请确定使用哪种方法在模块目录中注册模块**。对于 WPF，可以在代码、XAML 中、配置文件中注册模块，或者在磁盘上的本地目录中发现模块。
+- **确定模块通信和依赖关系策略**。模块之间需要相互通信，并且需要处理模块之间的依赖关系。
+- **确定依赖项注入容器**。通常，模块化系统需要依赖注入、控制反转或服务定位器，以允许模块的松耦合和动态加载和创建。Prism 允许在使用 Unity 或 DryIoc 之间进行选择，并为基于 Unity 和 DryIoc 的应用程序提供库。
+- **最大限度缩短应用程序启动时间**。考虑模块的按需和后台下载，以最大程度地减少应用程序启动时间。
+- **确定部署要求**。您需要考虑打算如何部署应用程序。
 
-The next sections provide details about some of these decisions.
+下一节将详细介绍其中一些决策。
 
-## Partition Your Application into Modules
+## 将应用程序划分为多个模块
 
-When you develop your application in a modularized fashion, you structure the application into separate client modules that can be individually developed, tested, and deployed. Each module will encapsulate a portion of your application's overall functionality. One of the first design decisions you will have to make is to decide how to partition your application's functionality into discrete modules.
+以模块化方式开发应用程序时，将应用程序构建为单独的客户端模块，这些模块可以单独开发、测试和部署。每个模块将封装应用程序整体功能的一部分。您必须做出的第一个设计决策是决定如何将应用程序的功能划分为离散模块。
 
-A module should encapsulate a set of related concerns and have a distinct set of responsibilities. A module can represent a vertical slice of the application or a horizontal service layer.
+一个模块应该封装一组相关的关注点，并具有一组不同的职责。模块可以表示应用程序的垂直切片或水平服务层。
 
 ![A vertical sliced application](../images/ModularityVertical.png)
 
-An application with modules organized around vertical slices
+具有围绕垂直切片组织的模块的应用程序
 
 ![A horizontal layered application](../images/ModularityHor.png)
 
-An application with modules organized around horizontal layers
+具有围绕水平层组织的模块的应用程序
 
-A larger application may have modules organized with vertical slices and horizontal layers. Some examples of modules include the following:
+较大的应用程序可能具有使用垂直切片和水平层组织的模块。模块的一些示例包括：
 
-- A module that contains a specific application feature, such as a module that serves news and/or announcements
-- A module that contains a specific sub-system or functionality for a set of related use cases, such as purchasing, invoicing, or general ledger
-- A module that contains infrastructure services, such as logging, caching, and authorization services, or web services
-- A module that contains services that invoke line-of-business (LOB) systems, such as Siebel CRM and SAP, in addition to other internal systems
+- 包含特定应用程序功能的模块，例如提供新闻和/或公告的模块
+- 包含一组相关用例（如采购、开票或总账）的特定子系统或功能的模块
+- 包含基础结构服务（如日志记录、缓存和授权服务）或 Web 服务的模块
+- 一个模块，其中包含调用业务线 （LOB） 系统（如 Siebel CRM 和 SAP）以及其他内部系统的服务
 
-A module should have a minimal set of dependencies on other modules. When a module has a dependency on another module, it should be loosely coupled by using interfaces defined in a shared library instead of concrete types, or by using the **EventAggregator** to communicate with other modules via **EventAggregator** event types.
+一个模块应该对其他模块有一组最小的依赖关系。当一个模块依赖于另一个模块时，应使用共享库中定义的接口而不是具体类型，或者使用 **EventAggregator** 通过 **EventAggregator** 事件类型与其他模块进行通信，从而对其进行松散耦合。
 
-The goal of modularity is to partition the application in such a way that it remains flexible, maintainable, and stable even as features and technologies are added and removed. The best way to accomplish this is to design your application so that modules are as independent as possible, have well defined interfaces, and are as isolated as possible.
+模块化的目标是以这样一种方式对应用程序进行分区，使其即使在添加和删除功能和技术时也能保持灵活性、可维护性和稳定性。实现此目的的最佳方法是设计应用程序，使模块尽可能独立，具有定义良好的接口，并尽可能隔离。
 
-### Determine Ratio of Projects to Modules
+### 确定项目与模块的比重
 
-There are several ways to create and package modules. The recommended and most common way is to create a single assembly per module. This helps keep logical modules separate and promotes proper encapsulation. It also makes it easier to talk about the assembly as the module boundary as well as the packaging of how you deploy the module. However, nothing prevents a single assembly from containing multiple modules, and in some cases this may be preferred to minimize the number of projects in your solution. For a large application, it is not uncommon to have 10–50 modules. Separating each module into its own project adds a lot of complexity to the solution and can slow down Visual Studio performance. Sometimes it makes sense to break a module or set of modules into their own solution to manage this if you choose to stick to one module per assembly/Visual Studio project.
+有几种方法可以创建和打包模块。推荐的最常用方法是为每个模块创建一个程序集。这有助于保持逻辑模块的分离，并促进正确的封装。它还使将程序集作为模块边界以及如何部署模块的打包更加容易。但是，没有什么可以阻止单个程序集包含多个模块，在某些情况下，这可能是首选方法，以最大程度地减少解决方案中的项目数。对于大型应用程序，拥有 10-50 个模块的情况并不少见。将每个模块分离到其自己的项目中会增加解决方案的复杂性，并且可能会降低 Visual Studio 性能。有时，如果选择坚持每个程序集/Visual Studio 项目使用一个模块，则将一个模块或一组模块分解为它们自己的解决方案来管理这一点是有意义的。
 
-## Use Dependency Injection for Loose Coupling
+## 使用依赖注入进行松耦合
 
-A module may depend on components and services provided by the host application or by other modules. Prism supports the ability to register dependencies between modules so that they are loaded and initialized in the right order. Prism also supports the initialization of modules when they are loaded into the application. During module initialization, the module can retrieve references to the additional components and services it requires, and/or register any components and services that it contains in order to make them available to other modules.
+模块可能依赖于主机应用程序或其他模块提供的组件和服务。Prism 支持在模块之间注册依赖关系的功能，以便以正确的顺序加载和初始化它们。Prism 还支持在将模块加载到应用程序时对其进行初始化。在模块初始化期间，模块可以检索对它所需的其他组件和服务的引用，和/或注册它包含的任何组件和服务，以便使它们可供其他模块使用。
 
-A module should use an independent mechanism to get instances of external interfaces instead of directly instantiating a concrete type, for example by using a dependency injection container or factory service. Dependency injection containers such as Unity or DryIoc allow a type to automatically acquire instances of the interfaces and types it needs through dependency injection. Prism integrates with Unity and DryIoc to allow a module to easily use dependency injection.
+模块应该使用独立的机制来获取外部接口的实例，而不是直接实例化具体类型，例如使用依赖注入容器或工厂服务。Unity 或 DryIoc 等依赖注入容器允许类型通过依赖注入自动获取其所需的接口和类型的实例。Prism 与 Unity 和 DryIoc 集成，允许模块轻松使用依赖注入。
 
-The following diagram shows the typical sequence of operations when modules are loaded that need to acquire or register references to the components and services.
+下图显示了加载模块时需要获取或注册对组件和服务的引用的典型操作顺序。
 
 ![Example of dependency injection](../images/ModularityDi.png)
 
-In this example, the ```OrdersModule``` assembly defines an ```OrdersRepository``` class (along with other views and classes that implement order functionality). The ```CustomerModule``` assembly defines a ```CustomersViewModel``` class which depends on the ```OrdersRepository```, typically based on an interface exposed by the service. The application startup and bootstrapping process contains the following steps:
+在此示例中， ```OrdersModule``` 程序集定义一个 ```OrdersRepository``` 类（以及实现顺序功能的其他视图和类）。 ```CustomerModule``` 程序集定义一个 ```CustomersViewModel``` 类，该类依赖于 ```OrdersRepository```，通常基于服务公开的接口。应用程序启动和引导过程包含以下步骤：
 
-1. The ```App``` class that is derived from ```PrismApplication``` starts the module initialization process, and the module loader loads and initializes the ```OrdersModule```.
-1. In the initialization of the ```OrdersModule```, it registers the ```OrdersRepository``` with the container.
-1. The module loader then loads the ```CustomersModule```. The order of module loading can be specified by the dependencies in the module metadata.
-1. The ```CustomersModule``` constructs an instance of the ```CustomerViewModel``` by resolving it through the container. The ```CustomerViewModel``` has a dependency on the ```OrdersRepository``` (typically based on its interface) and indicates it through constructor or property injection. The container injects that dependency in the construction of the view model based on the type registered by the ```OrdersModule```. The net result is an interface reference from the ```CustomerViewModel``` to the ```OrderRepository``` without tight coupling between those classes.
+1. 派生自 ```PrismApplication``` 的 ```App``` 类 启动模块初始化过程，模块加载器加载并初始化 ```OrdersModule```.
+2. 在初始化 ```OrdersModule```时，它会向容器注册 ```OrdersRepository```。
+3. 然后，模块加载器加载 ```CustomersModule```。 模块加载的顺序可以通过模块元数据中的依赖关系来指定。
+4. ```CustomersModule``` 通过容器解析来构造 ```CustomerViewModel``` 的一个实例。```CustomerViewModel``` 依赖于 ```OrdersRepository``` （通常基于其接口），并通过构造函数或属性注入来表明这一点。容器根据 ```OrdersModule```注册的类型，在构造视图模型时注入该依赖。最终结果是 ```CustomerViewModel``` 到 ```OrderRepository``` 的一个接口引用，而这些类之间没有紧密耦合。
 
-**Note:** The interface used to expose the ```OrderRepository``` (```IOrderRepository```) could reside in a separate "shared services" assembly or an "orders services" assembly that only contains the service interfaces and types required to expose those services. This way, there is no hard dependency between the ```CustomersModule``` and the ```OrdersModule```.
+**注意:** 用于公开 ```OrderRepository``` (```IOrderRepository```) 的接口可以驻留在单独的“共享服务”程序集或“订单服务”程序集中，该程序集仅包含公开这些服务所需的服务接口和类型。这样，和 ```CustomersModule``` 之间 ```OrdersModule```就没有硬依赖关系了。
 
-> Note that both modules have an implicit dependency on the dependency injection container. This dependency is injected during module construction in the module loader.
+> 请注意，这两个模块都对依赖项注入容器具有隐式依赖关系。这种依赖关系是在模块加载器中的模块构造期间注入的。
 
-## Core Scenarios
+## 核心方案
 
-This section describes the common scenarios you will encounter when working with modules in your application. These scenarios include defining a module, registering and discovering modules, loading modules, initializing modules, specifying module dependencies, loading modules on demand, downloading remote modules in the background, and detecting when a module has already been loaded. You can register and discover modules in code, in a XAML or application configuration file, or by scanning a local directory.
+本节介绍在应用程序中使用模块时将遇到的常见方案。这些方案包括定义模块、注册和发现模块、加载模块、初始化模块、指定模块依赖关系、按需加载模块、在后台下载远程模块以及检测模块是否已加载。可以在代码中、XAML 或应用程序配置文件中或通过扫描本地目录来注册和发现模块。
 
 ### Defining a Module
 
-A module is a logical collection of functionality and resources that is packaged in a way that can be separately developed, tested, deployed, and integrated into an application. Each module has a central class that is responsible for initializing the module and integrating its functionality into the application. That class implements the ```IModule``` interface, as shown here.
+模块是功能和资源的逻辑集合，其打包方式可以单独开发、测试、部署和集成到应用程序中。每个模块都有一个中心类，该类负责初始化模块并将其功能集成到应用程序中。该类实现接口， ```IModule``` 如下所示。
 
 ```cs
 public class MyModule : IModule
@@ -200,21 +200,21 @@ public class MyModule : IModule
     }
 }
 ```
-Implement ```RegisterTypes``` to handle the registration with the dependency injection container all of the services that this module implements.
+实现 ```RegisterTypes``` 以处理此模块实现的所有服务的依赖项注入容器的注册。
 
-How ```OnInitialized``` method is implemented will depend on the requirements of your application. Here is where you can register your views and do any other module level initialize that may be required.
+```OnInitialized``` 如何实现方法将取决于应用程序的要求。在这里，您可以注册视图并执行可能需要的任何其他模块级别初始化。
 
-### Registering and Discovering Modules
+### 注册和发现模块
 
-The modules that an application can load are defined in a module catalog. The Prism Module Loader uses the module catalog to determine which modules are available to be loaded into the application, when to load them, and in which order they are to be loaded.
+应用程序可以加载的模块在模块目录中定义。Prism 模块加载程序使用模块目录来确定哪些模块可以加载到应用程序中、何时加载它们以及加载它们的顺序。
 
-The module catalog is represented by a class that implements the ```IModuleCatalog``` interface. The module catalog class is created by the ```PrismApplication``` base class during application initialization. Prism provides different implementations of module catalog for you to choose from. You can also populate a module catalog from another data source by calling the ```AddModule``` method or by deriving from ```ModuleCatalog``` to create a module catalog with customized behavior.
+模块目录由实现 ```IModuleCatalog``` 接口的类表示。模块目录类由 ```PrismApplication``` 基类在应用程序初始化期间创建。Prism 提供了模块目录的不同实现供您选择。还可以通过调用 ```AddModule```  方法或派生方法 ```ModuleCatalog``` 从其他数据源填充模块目录，以创建具有自定义行为的模块目录。
 
-By default, the ```App``` class, derived from ```PrismApplication```, creates a ```ModuleCatalog``` in the ```CreateModuleCatalog``` method. In WPF and UNO, you can override this method to use different types of ```ModuleCatalog```.
+默认情况下，派生自 ```PrismApplication``` 的 ```App``` 类 ```ModuleCatalog``` 在 ```CreateModuleCatalog``` 方法中创建一个。在 WPF 和 UNO 中，可以重写此方法以使用不同类型的 ```ModuleCatalog``` .
 
-#### Registering Modules in Code
+#### 在代码中注册模块
 
-The most basic module catalog, and default, is provided by the ```ModuleCatalog``` class. You can use this module catalog to programmatically register modules by specifying the module class type. You can also programmatically specify the module name and initialization mode. To register the module directly with the ```ModuleCatalog``` class, call the ```AddModule``` method in your application's ```PrismApplication``` derived ```App``` class. Override ```ConfigureModuleCatalog``` to add your modules. An example is shown in the following code.
+最基本的模块目录和默认值由 ```ModuleCatalog``` 类提供。可以使用此模块目录通过指定模块类类型以编程方式注册模块。还可以以编程方式指定模块名称和初始化模式。若要直接向 ```ModuleCatalog``` 类注册模块，请在应用程序的 ```PrismApplication``` 派生 ```App``` 类中调用该 ```AddModule``` 方法。覆盖 ```ConfigureModuleCatalog``` 以添加模块。下面的代码中显示了一个示例。
 
 ```cs
 protected override void ConfigureModuleCatalog()
@@ -228,9 +228,9 @@ protected override void ConfigureModuleCatalog()
 }
 ```
 
-> **Note:** If your application has a direct reference to the module type, you can add it by type as shown above; otherwise you need to provide the fully qualified type name and the location of the assembly.
+> **注意:** 如果您的应用程序直接引用模块类型，则可以按类型添加它，如上所示;否则，您需要提供完全限定的类型名称和程序集的位置。
 
-To specify dependencies in code, use Prism supplied declarative attributes.
+若要在代码中指定依赖项，请使用 Prism 提供的声明性属性。
 
 ```cs
 [Module(ModuleName = "ModuleA")]
@@ -241,7 +241,7 @@ public class ModuleA : IModule
 }
 ```
 
-To specify on-demand loading in code, add the ```InitializationMode``` property to your new instance of ModuleInfo. Using the code below:
+若要在代码中指定按需加载，请将该 ```InitializationMode``` 属性添加到 ModuleInfo 的新实例中。使用以下代码：
 
 ```cs
 Type moduleCType = typeof(ModuleC);
@@ -253,11 +253,11 @@ ModuleCatalog.AddModule(new ModuleInfo()
 });
 ```
 
-#### Registering Modules Using a XAML File
+#### 使用 XAML 文件注册模块
 
-You can define a module catalog declaratively by specifying it in a XAML file. The XAML file specifies what kind of module catalog class to create and which modules to add to it. Usually, the .xaml file is added as a resource to your shell project. The module catalog is created by the App with a call to the ```CreateFromXaml``` method. From a technical perspective, this approach is very similar to defining the ```ModuleCatalog``` in code because the XAML file simply defines a hierarchy of objects to be instantiated.
+可以通过在 XAML 文件中指定模块目录来以声明方式定义模块目录。XAML 文件指定要创建的模块目录类类型以及要添加到其中的模块。通常.xaml 文件将作为资源添加到 shell 项目中。模块目录由应用通过调用该 ```CreateFromXaml``` 方法创建。从技术角度来看，此方法与代码中定义 ```ModuleCatalog``` 非常相似，因为 XAML 文件只是定义要实例化的对象的层次结构。
 
-The following code example shows a XAML file specifying a module catalog.
+下面的代码示例演示一个指定模块目录的 XAML 文件。
 
 ```xml
 <--! ModulesCatalog.xaml -->
@@ -284,9 +284,9 @@ The following code example shows a XAML file specifying a module catalog.
 </Modularity:ModuleCatalog>
 ```
 
-> **Note:** ```ModuleInfoGroups``` provide a convenient way to group modules that are in the same assembly, are initialized in the same way, or only have dependencies on modules in the same group. Dependencies between modules can be defined within modules in the same ```ModuleInfoGroup```; however, you cannot define dependencies between modules in different ```ModuleInfoGroups```. Putting modules inside module groups is optional. The properties that are set for a group will be applied to all its contained modules. Note that modules can also be registered without being inside a group._
+> **注意:** ```ModuleInfoGroups``` 提供一种方便的方式来对位于同一程序集中的模块进行分组，以相同的方式初始化，或者仅对同一组中的模块具有依赖关系。模块之间的依赖关系可以在同一 ```ModuleInfoGroup``` 模块内定义;但是，您不能定义不同 ```ModuleInfoGroups``` 模块之间的依赖关系。将模块放在模块组中是可选的。为组设置的属性将应用于其包含的所有模块。请注意，模块也可以在不group._内注册
 
-Example on creating the catalog from a XAML file is below:
+从 XAML 文件创建目录的示例如下：
 
 ```cs
 protected override IModuleCatalog CreateModuleCatalog()
@@ -295,7 +295,7 @@ protected override IModuleCatalog CreateModuleCatalog()
 }
 ```
 
-To specify dependencies in XAML, follow the example below:
+若要在 XAML 中指定依赖项，请执行以下示例：
 
 ```xml
 <-- ModulesCatalog.xaml -->
@@ -307,17 +307,17 @@ To specify dependencies in XAML, follow the example below:
 </Modularity:ModuleInfo>
 ```
 
-To specify on-demand loading of your module, add the ```startupLoaded``` attribute to the ```Modularity:ModuleInfo``` element.
+若要指定模块的按需加载，请将 ```startupLoaded``` 该属性添加到 ```Modularity:ModuleInfo``` 元素。
 
 ```xml
 <Modularity:ModuleInfo Ref="file://ModuleE.dll" moduleName="ModuleE" moduleType="ModuleE.Module, ModuleE, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" startupLoaded="false" />
 ```
 
-#### Registering Modules Using a Configuration File
+#### 使用配置文件注册模块
 
-In WPF, it is possible to specify the module information in the App.config file. The advantage of this approach is that this file is not compiled into the application. This makes it very easy to add or remove modules at run time without recompiling the application.
+在 WPF 中，可以在 App.config 文件中指定模块信息。此方法的优点是此文件不会编译到应用程序中。这使得在运行时添加或删除模块变得非常容易，而无需重新编译应用程序。
 
-The following code example shows a configuration file specifying a module catalog.
+下面的代码示例演示指定模块目录的配置文件。
 
 ```xml
 <!-- ModularityWithUnity.Desktop\\app.config -->
@@ -338,9 +338,9 @@ The following code example shows a configuration file specifying a module catalo
 </configuration>
 ```
 
-> **Note:** Even if your assemblies are in the global assembly cache or in the same folder as the application, the ```assemblyFile``` attribute is required. The attribute is used to map the ```moduleType``` to the correct ```IModuleTypeLoader``` to use.
+> **注意:** 即使程序集位于全局程序集缓存中或与应用程序位于同一文件夹中，该 ```assemblyFile``` 属性也是必需的。该属性用于映射 ```moduleType``` 到要使用的正确 ```IModuleTypeLoader``` 位置。
 
-In your application's ```App``` class, you need to specify that the configuration file is the source for your ```ModuleCatalog```. To do this, override the ```CreateModuleCatalog``` method and return an instance of the ```ConfigurationModuleCatalog``` class.
+在应用程序 ```App``` 的类中，需要指定配置文件是 ```ModuleCatalog``` 。为此，请重写该 ```CreateModuleCatalog``` 方法并返回 ```ConfigurationModuleCatalog``` 该类的实例。
 
 ```cs
 protected override IModuleCatalog CreateModuleCatalog()
@@ -349,9 +349,9 @@ protected override IModuleCatalog CreateModuleCatalog()
 }
 ```
 
-> **Note:** You can still add modules to a ```ConfigurationModuleCatalog``` in code. You can use this, for example, to make sure that the modules that your application absolutely needs to function are defined in the catalog.
+> **注意:** 您仍然可以将模块添加到 ```ConfigurationModuleCatalog``` 代码中。例如，您可以使用它来确保在目录中定义应用程序绝对需要运行的模块。
 
-To specify dependencies in the app.config file:
+若要在 app.config 文件中指定依赖项，请执行以下操作：
 
 ```xml
 <-- app.config -->
@@ -365,7 +365,7 @@ To specify dependencies in the app.config file:
 </modules>
 ```
 
-To specify on-demand loading using a configuration file, set the ```startupLoaded``` attribute of the ```module``` element to ```false```.
+若要使用配置文件指定按需加载，请将 ```startupLoaded``` 的 ```module``` 元素的属性设置为 ```false``` 。
 
 ```xml
 <module assemblyFile="ModularityWithUnity.Desktop.ModuleE.dll" moduleType="ModularityWithUnity.Desktop.ModuleE, ModularityWithUnity.Desktop.ModuleE, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" moduleName="ModuleE" startupLoaded="false" />
@@ -373,7 +373,7 @@ To specify on-demand loading using a configuration file, set the ```startupLoade
 
 #### Discovering Modules in a Directory
 
-The Prism ```DirectoryModuleCatalog``` class allows you to specify a local directory as a module catalog in WPF. This module catalog will scan the specified folder and search for assemblies that define the modules for your application. To use this approach, you will need to use declarative attributes on your module classes to specify the module name and any dependencies that they have. The following code example shows a module catalog that is populated by discovering assemblies in a directory.
+Prism 的 DirectoryModuleCatalog 类允许您在 WPF 中将本地目录指定为模块目录。此模块目录将扫描指定的文件夹并搜索为应用程序定义模块的程序集。若要使用此方法，需要在模块类上使用声明性属性来指定模块名称及其具有的任何依赖项。下面的代码示例演示通过发现目录中的程序集来填充的模块目录。
 
 ```cs
 protected override IModuleCatalog CreateModuleCatalog()
@@ -382,9 +382,9 @@ protected override IModuleCatalog CreateModuleCatalog()
 }
 ```
 
-To specify dependencies, use the same method as if you were using code.
+若要指定依赖项，请使用与使用代码相同的方法。
 
-To handle loading on demand or at startup, update the ```Module``` attribute as follows:
+若要按需或启动时处理加载，请按如下方式更新 ```Module``` 属性：
 ```cs
 [Module(ModuleName = "ModuleA", OnDemand = true)]
 [ModuleDependency("ModuleD")]
@@ -394,13 +394,13 @@ public class ModuleA : IModule
 }
 ```
 
-## Other Modularity Items of Note
+## 其他模块化注意事项
 
-### Requesting On-Demand loading of Module
+### 请求按需加载模块
 
-After a module is specified as on-demand, the application can ask the module to be loaded. The code that wants to initiate the loading needs to obtain a reference to the ```IModuleManager``` service registered with the container in the ```App``` class.
+将模块指定为按需模块后，应用程序可以请求加载该模块。想要启动加载的代码需要获取对 ```App``` 在类中向容器注册 ```IModuleManager``` 的服务的引用。
 
-An explicit load of a module can be performed by the following code:
+模块的显式加载可以通过以下代码执行：
 
 ```cs
 public class SomeViewModel : BindableBase
@@ -420,9 +420,9 @@ public class SomeViewModel : BindableBase
 }
 ```
 
-### Detecting When a Module is Loaded
+### 检测模块何时加载
 
-The ```ModuleManager``` service provides an event for applications to track when a module loads or fails to load.
+该 ```ModuleManager``` 服务为应用程序提供一个事件，用于跟踪模块加载或加载失败的时间。
 
 ```cs
 public class SomeViewModel : BindableBase
@@ -442,8 +442,8 @@ public class SomeViewModel : BindableBase
 }
 ```
 
-To keep the application and modules loosely coupled, the application should avoid using this event to integrate the module with the application. Instead, the module's ```RegisterTypes``` and ```OnInitialized``` should handle integrating with the application.
+若要使应用程序和模块保持松散耦合，应用程序应避免使用此事件将模块与应用程序集成。相反，模块 ```RegisterTypes``` 的 和 ```OnInitialized``` 应该处理与应用程序的集成。
 
-The ```LoadModuleCompletedEventArgs``` contains an ```IsErrorHandled``` property. If a module fails to load and the application wants to prevent the ```ModuleManager``` from logging the error and throwing an exception, it can set this property to **true**.
+```LoadModuleCompletedEventArgs``` 包含一个 ```IsErrorHandled``` 属性。如果模块加载失败，并且应用程序希望防止记录 ```ModuleManager``` 错误并引发异常，则可以将此属性设置为 **true**.
 
-> **Note**: After a module is loaded and initialized, the module assembly cannot be unloaded. The module instance reference will not be held by the Prism libraries, so the module class instance may be garbage collected after initialization is complete.
+> **注意**: 加载并初始化模块后，无法卸载模块组件。Prism 库不会保存模块实例引用，因此模块类实例可能会在初始化完成后被垃圾回收。
