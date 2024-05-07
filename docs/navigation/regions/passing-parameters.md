@@ -1,10 +1,10 @@
-# Passing Parameters During Navigation
+# 在导航过程中传递参数
 
-To implement the required navigational behavior in your application, you will often need to specify additional data during navigation request than just the target view name. The **NavigationContext** object provides access to the navigation URI, and to any parameters that were specified within it or externally. You can access the **NavigationContext** from within the **IsNavigationTarget**, **OnNavigatedFrom**, and **OnNavigatedTo** methods.
+若要在应用程序中实现所需的导航行为，通常需要在导航请求期间指定其他数据，而不仅仅是目标视图名称。 **NavigationContext** 对象提供对导航 URI 以及在其内或外部指定的任何参数的访问。可以从 **IsNavigationTarget** 、 **OnNavigatedFrom** 和 **OnNavigatedTo** 方法中访问 **NavigationContext。**
 
-Prism provides the **NavigationParameters** class to help specify and retrieve navigation parameters. The **NavigationParameters** class maintains a list of name-value pairs, one for each parameter. You can use this class to pass parameters as part of navigation URI or for passing object parameters.
+Prism 提供了 **NavigationParameters** 类来帮助指定和检索导航参数。 **NavigationParameters** 类维护一个名称/值对列表，每个参数对一个。可以使用此类将参数作为导航 URI 的一部分传递，或用于传递对象参数。
 
-The following code example shows how to add individual string parameters to the **NavigationParameters** instance so that it can be appended to the navigation URI.
+下面的代码示例演示如何向 **NavigationParameters** 实例添加单个字符串参数，以便可以将其追加到导航 URI。
 
 ```cs
 Employee employee = Employees.CurrentItem as Employee;
@@ -19,7 +19,7 @@ if (employee != null)
 }
 ```
 
-Additionally, you can pass object parameters by adding them to the **NavigationParameters** instance, and passing it as a parameter of the **RequestNavigate** method. This is shown in the following code using the simpler string based navigation:
+此外，还可以通过将对象参数添加到 **NavigationParameters** 实例并将其作为 **RequestNavigate** 方法的参数传递来传递对象参数。以下代码使用更简单的基于字符串的导航显示了这一点：
 
 ```cs
 Employee employee = Employees.CurrentItem as Employee;
@@ -32,7 +32,7 @@ if (employee != null)
 }
 ```
 
-You can retrieve the navigation parameters using the **Parameters** property on the **NavigationContext** object. This property returns an instance of the **NavigationParameters** class, which provides an indexer property to allow easy access to individual parameters, independently of them being passed through the query or through the **RequestNavigate** method.
+可以使用 **NavigationContext** 对象的 **Parameters** 属性检索导航参数。此属性返回 **NavigationParameters** 类的实例，该类提供索引器属性，以允许轻松访问单个参数，而与通过查询或 **RequestNavigate** 方法传递这些参数无关。
 
 ```cs
 public void OnNavigatedTo(NavigationContext navigationContext)
@@ -42,7 +42,7 @@ public void OnNavigatedTo(NavigationContext navigationContext)
 }
 ```
 
-You can also retrieve parameters in a type safe manner using generics:
+您还可以使用泛型以类型安全的方式检索参数：
 
 ```cs
 public void OnNavigatedTo(NavigationContext navigationContext)

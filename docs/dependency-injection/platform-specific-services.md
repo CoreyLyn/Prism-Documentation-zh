@@ -1,15 +1,14 @@
-# Using IPlatformInitializer
+# 使用 IPlatformInitializer
 
-> [!NOTE]
-> The following docs are only relevant to Prism for Xamarin.Forms. `IPlatformInitializer` is not used by any other platform.
+?> 以下文档仅与 Prism for Xamarin.Forms 相关。 `IPlatformInitializer` 不被任何其他平台使用。
 
-With Xamarin.Forms you may have read how you can add the Dependency attribute for an implementing type in your Platform Specific code and then resolve it with the Xamarin.Forms DependencyService. This is considered a major Anti-Pattern that should be avoided when you are using a proper Dependency Injection container. It is for this reason that Prism has dropped all support for working with the DependencyService as of Prism 7.0. Starting with Prism 6.3 the `IPlatformInitializer` was introduced. This allows you to easily register types with Prism's container.
+使用 Xamarin.Forms，你可能已经阅读了如何在平台特定代码中为实现类型添加 Dependency 属性，然后使用 Xamarin.Forms DependencyService 解析它。这被认为是一个主要的反模式，在使用适当的依赖注入容器时应避免。正是出于这个原因，Prism 从 Prism 7.0 开始放弃了对使用 DependencyService 的所有支持。从 Prism 6.3 开始， `IPlatformInitializer` 引入了 Prism 6.3。这使您可以轻松地向 Prism 的容器注册类型。
 
-> [!Video https://www.youtube.com/embed/qMzTAOOgY8c]
+<iframe height="510" src="https://www.youtube.com/embed/qMzTAOOgY8c" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 <hr />
 
-The `IPlatformInitializer` is a very simple interface which simply contains a single method for `RegisterTypes`. The `IPlatformInitializer` can then be passed into the PrismApplication when you create your app. For iOS you might simply have the following code:
+这是一个非常 `IPlatformInitializer` 简单的接口，它只包含一个 `RegisterTypes` 。 `IPlatformInitializer` 然后，可以在创建应用程序时将其传递到 PrismApplication 中。对于 iOS，您可能只需使用以下代码：
 
 ```cs
 public partial class AppDelegate : FormsApplicationDelegate, IPlatformInitializer
@@ -29,7 +28,7 @@ public partial class AppDelegate : FormsApplicationDelegate, IPlatformInitialize
 }
 ```
 
-Keep in mind that you will need to be sure your App contains the proper constructor overload like the following:
+请记住，您需要确保您的 App 包含正确的构造函数重载，如下所示：
 
 ```cs
 public class App : PrismApplication

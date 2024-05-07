@@ -33,7 +33,6 @@
         - [区域 Manager](navigation/regions/region-manager.md)
         - [区域 Adapters](navigation/regions/region-adapters.md)
         - [区域 Behaviors](navigation/regions/region-behaviors.md)
-        - [关于 Prism 中的导航](navigation/regions/index.md)
         - [基础区域导航](navigation/regions/basic-region-navigation.md)
         - [View/ViewModel 参与导航](navigation/regions/view-viewmodel-participation.md)
         - [导航到现有视图](navigation/regions/navigation-existing-views.md)

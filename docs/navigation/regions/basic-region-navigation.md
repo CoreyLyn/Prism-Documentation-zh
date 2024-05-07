@@ -1,46 +1,46 @@
-# Basic Region Navigation
+# 基础区域导航
 
-Both view injection and view discovery can be considered to be limited forms of navigation. View injection is a form of explicit, programmatic navigation and view discovery is a form of implicit or deferred navigation. However, in Prism, regions have been extended to support a more general notion of navigation, based on URIs and an extensible navigation mechanism.
+视图注入和视图发现都可以被视为有限的导航形式。视图注入是显式编程导航的一种形式，视图发现是隐式或延迟导航的一种形式。但是，在 Prism 中，区域已扩展为支持基于 URI 和可扩展导航机制的更通用的导航概念。
 
-Navigation within a region means that a new view is to be displayed within that region. The view to be displayed is identified via a URI, which, by default, refers to the name of the view to be created. You can programmatically initiate navigation using the **RequestNavigate** method defined by the **INavigateAsync** interface.
+在区域内导航意味着将在该区域内显示新视图。要显示的视图通过 URI 标识，默认情况下，URI 引用要创建的视图的名称。可以使用 **INavigateAsync** 接口定义的 **RequestNavigate** 方法以编程方式启动导航。
 
->**Note:** Despite its name, the **INavigateAsync** interface does not represent asynchronous navigation that's carried out on a separate background thread. Instead, the **INavigateAsync** interface represents the ability to perform pseudo-asynchronous navigation. The **RequestNavigate** method may return synchronously following the completion of navigation operation, or it may return while a navigation operation is still pending, as in the case where the user needs to confirm the navigation. By allowing you to specify callbacks and continuations during navigation, Prism provides a mechanism to enable these scenarios without requiring the complexity of navigating on a background thread.
+>**注意:** 尽管名称如此，但 **INavigateAsync** 接口并不表示在单独的后台线程上执行的异步导航。相反， **INavigateAsync** 接口表示执行伪异步导航的能力。 **RequestNavigate** 方法可以在导航操作完成后同步返回，也可以在导航操作仍处于挂起状态时返回，例如用户需要确认导航的情况。通过允许您在导航期间指定回调和延续，Prism 提供了一种机制来启用这些方案，而无需在后台线程上导航的复杂性。
 
-The **INavigateAsync** interface is implemented by the **Region** class, allowing you to initiate navigation within that region.
+**INavigateAsync** 接口由 **Region** 类实现，允许您在该区域内启动导航。
 
 ```cs
 IRegion mainRegion = ...;
 mainRegion.RequestNavigate(new Uri("InboxView", UriKind.Relative));
 ```
 
-You can also use the simpler string overload:
+您还可以使用更简单的字符串重载：
 
 ```cs
 IRegion mainRegion = ...;
 mainRegion.RequestNavigate("InboxView");
 ```
 
-You can also call the **RequestNavigate** method on the **RegionManager**, which allows you to specify the name of the region to be navigated. This convenient method obtains a reference to the specified region and then calls the **RequestNavigate** method, as shown in the preceding code example.
+您还可以在 **RegionManager** 上调用 **RequestNavigate** 方法 , 该方法允许您指定要导航的区域的名称。此便捷方法获取对指定区域的引用，然后调用 **RequestNavigate** 方法，如前面的代码示例所示。
 
 ```cs
 IRegionManager regionManager = ...;
 regionManager.RequestNavigate("MainRegion", new Uri("InboxView", UriKind.Relative));
 ```
 
-As above, you can use a string overload to navigate:
+如上所述，您可以使用字符串重载进行导航：
 
 ```cs
 IRegionManager regionManager = ...;
 regionManager.RequestNavigate("MainRegion", "InboxView");
 ```
 
-By default, the navigation URI specifies the name of a view that is registered in the container.
+默认情况下，导航 URI 指定在容器中注册的视图的名称。
 
-During navigation, the specified view is instantiated, via the container, along with its corresponding view model and other dependent services and components. After the view is instantiated, it is then added to the specified region and activated. Refer to [View and View Model Participation](xref:Navigation.Regions.ViewViewModelParticipation) for more information on this.
+在导航过程中，通过容器实例化指定的视图及其相应的视图模型以及其他依赖的服务和组件。实例化视图后，将其添加到指定区域并激活。有关此内容的更多信息，请参阅 [View and View Model Participation](xref:Navigation.Regions.ViewViewModelParticipation) 。
 
->**Note:** The preceding description illustrates view-first navigation, where the URI refers to the name of the view type, as it is registered with the container. With view-first navigation, the dependent view model is created as a dependency of the view. An alternative approach is to use view model–first navigation, where the navigation URI refers to the name of the view model type, as it is registered with the container. View model–first navigation is useful when the view is defined as a data template, or when you want your navigation scheme to be defined independently of the views.
+>**注意:** 前面的描述说明了视图优先导航，其中 URI 引用视图类型的名称，因为它已注册到容器。使用视图优先导航时，依赖视图模型将创建为视图的依赖关系。另一种方法是使用视图模型优先导航，其中导航 URI 引用视图模型类型的名称，因为它已注册到容器。当视图定义为数据模板时，或者当您希望独立于视图定义导航方案时，视图模型优先导航非常有用。
 
-The **RequestNavigate** method also allows you to specify a callback method, or a delegate, which will be called when navigation is complete.
+**RequestNavigate** 方法还允许您指定回调方法或委托，该方法或委托将在导航完成时调用。
 
 ```cs
 private void SelectedEmployeeChanged(object sender, EventArgs e)
@@ -54,4 +54,4 @@ private void NavigationCompleted(NavigationResult result)
 }
 ```
 
-The **NavigationResult** class defines properties that provide information about the navigation operation. The **Result** property indicates whether or not navigation succeeded. If navigation was successful, then the **Result** property will be _true_. If navigation failed, normally because of returning 'continuationCallBack(false)' in the **IConfirmNavigationResult.ConfirmNavigationRequest** method, then the **Result** property will be _false_. If navigation failed due to an exception, the **Result** property will be _false_ and the **Error** property provides a reference to any exception that was thrown during navigation. The **Context** property provides access to the navigation URI and any parameters it contains, and a reference to the navigation service that coordinated the navigation operation.
+**NavigationResult** 类定义提供有关导航操作的信息的属性。 **Result** 属性指示导航是否成功。如果导航成功，则 **Result** 属性将为 _true_. 如果导航失败（通常是由于在 **IConfirmNavigationResult.ConfirmNavigationRequest** 方法中返回 'continuationCallBack(false)' , 则 **Result** 属性将为 _false_. 如果导航由于异常而失败，则 **Result** 属性将为 _false_，并且 **Error** 属性提供对导航期间引发的任何异常的引用。 **Context** 属性提供对导航 URI 及其包含的任何参数的访问，以及对协调导航操作的导航服务的引用。

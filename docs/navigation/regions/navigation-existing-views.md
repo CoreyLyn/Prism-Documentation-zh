@@ -1,18 +1,18 @@
-# Navigating to Existing Views
+# 导航到现有视图
 
-Frequently, it is more appropriate for the views in your application to be re-used, updated, or activated during navigation, instead of replaced by a new view. This is often the case where you are navigating to the same type of view but need to display different information or state to the user, or when the appropriate view is already available in the UI but needs to be activated (that is, selected or made top-most).
+通常，在导航过程中重用、更新或激活应用程序中的视图更合适，而不是用新视图替换。当您导航到相同类型的视图，但需要向用户显示不同的信息或状态时，或者当相应的视图在 UI 中已可用但需要激活（即，选择或设置为最顶端）时，通常会出现这种情况。
 
-For an example of the first scenario, imagine that your application allows the user to edit customer records, using the **EditCustomer** view, and the user is currently using that view to edit customer ID 123. If the customer decides to edit the customer record for customer ID 456, the user can simply navigate to the **EditCustomer** view and enter the new customer ID. The **EditCustomer** view can then retrieve the data for the new customer and update its UI accordingly.
+对于第一种方案的示例，假设您的应用程序允许用户使用 **EditCustomer** 视图编辑客户记录，并且用户当前正在使用该视图编辑客户 ID 123。如果客户决定编辑客户 ID 456 的客户记录，则用户只需导航到 **EditCustomer** 视图并输入新的客户 ID。然后， **EditCustomer** 视图可以检索新客户的数据并相应地更新其 UI。
 
-An example of the second scenario is where the application allows the user to edit more than one customer record at a time. In this case, the application displays multiple **EditCustomer** view instances in a tab control—for example, one for customer ID 123 and another for customer ID 456. When the user navigates to the **EditCustomer** view and enters customer ID 456, the corresponding view will be activated (that is, its corresponding tab will be selected). If the user navigates to the **EditCustomer** view and enters customer ID 789, a new instance will be created and displayed in the tab control.
+第二种方案的一个示例是，应用程序允许用户一次编辑多个客户记录。在这种情况下，应用程序在选项卡控件中显示多个 **EditCustomer** 视图实例，例如，一个用于客户 ID 123，另一个用于客户 ID 456。当用户导航到 **EditCustomer** 视图并输入客户 ID 456 时，将激活相应的视图（即，将选择其相应的选项卡）。如果用户导航到 **EditCustomer** 视图并输入客户 ID 789，则将创建一个新实例并显示在选项卡控件中。
 
-The ability to navigate to an existing view is useful for a variety of reasons. It is often more efficient to update an existing view instead of replace it with a new instance of the same type. Similarly, activating an existing view, instead of creating a duplicate view, provides a more consistent user experience. In addition, the ability to handle these situations seamlessly without requiring much custom code means that the application is easier to develop and maintain.
+出于各种原因，导航到现有视图的功能非常有用。更新现有视图通常比将其替换为相同类型的新实例更有效。同样，激活现有视图（而不是创建重复视图）可提供更一致的用户体验。此外，无需太多自定义代码即可无缝处理这些情况的能力意味着应用程序更易于开发和维护。
 
-Prism supports the two scenarios described earlier via the **IsNavigationTarget** method on the **INavigationAware** interface. This method is called during navigation on all views in a region that are of the same type as the target view. In the preceding examples, the target type of the view is the **EditCustomer** view, so the **IsNavigationTarget** method will be called on all existing **EditCustomer** view instances currently in the region. Prism determines the target type from the view URI, which it assumes is the short type name of the target type.
+Prism 通过 **INavigationAware** 接口上的 **IsNavigationTarget** 方法支持前面所述的两种方案。在对区域中与目标视图类型相同的所有视图进行导航时，将调用此方法。在前面的示例中，视图的目标类型是 **EditCustomer** 视图，因此将在区域中当前的所有现有 **EditCustomer** 视图实例上调用 **IsNavigationTarget** 方法。Prism 从视图 URI 确定目标类型，它假定视图 URI 是目标类型的短类型名称。
 
-> **Note:** For Prism to determine the type of the target view, the view's name in the navigation URI should be the same as the actual target type's short type name. For example, if your view is implemented by the **MyApp.Views.EmployeeDetailsView** class, the view name specified in the navigation URI should be **EmployeeDetailsView**. This is the default behavior provided by Prism. You can customize this behavior by implementing a custom content loader class: do this by implementing the **IRegionNavigationContentLoader** interface or by deriving from the **RegionNavigationContentLoader** class.
+> **注意:** 要使 Prism 确定目标视图的类型，导航 URI 中的视图名称应与实际目标类型的短类型名称相同。例如，如果视图由 **MyApp.Views.EmployeeDetailsView** 类实现，则导航 URI 中指定的视图名称应为 **EmployeeDetailsView** 。这是 Prism 提供的默认行为。可以通过实现自定义内容加载程序类来自定义此行为：通过实现 **IRegionNavigationContentLoader** 接口或从 **RegionNavigationContentLoader** 类派生来执行此操作。
 
-The implementation of the **IsNavigationTarget** method can use the **NavigationContext** parameter to determine whether it can handle the navigation request. The **NavigationContext** object provides access to the navigation URI and the navigation parameters. In the preceding examples, the implementation of this method in the **EditCustomer** view model compares the current customer ID to the ID specified in the navigation request, and it returns **true** if they match.
+**IsNavigationTarget** 方法的实现可以使用 **NavigationContext** 参数来确定它是否可以处理导航请求。 **NavigationContext** 对象提供对导航 URI 和导航参数的访问。在前面的示例中，此方法在 **EditCustomer** 视图模型中的实现将当前客户 ID 与导航请求中指定的 ID 进行比较，如果它们匹配，则返回 **true** 。
 
 ```cs
 public class EmployeeDetailsViewModel : BindableBase, INavigationAware
@@ -28,4 +28,4 @@ public class EmployeeDetailsViewModel : BindableBase, INavigationAware
 }
 ```
 
-If the **IsNavigationTarget** method always returns **true**, regardless of the navigation parameters, that view instance will always be re-used. This allows you to ensure that only one view of a particular type will be displayed in a particular region.
+如果 **IsNavigationTarget** 方法始终返回 **true** ，则无论导航参数如何，都将始终重复使用该视图实例。这样可以确保在特定区域中仅显示一个特定类型的视图。
