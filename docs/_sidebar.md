@@ -73,7 +73,7 @@
         - 交互
           - [将事件绑定到命令](platforms/wpf/interactivity/event-to-command.md)
     - Xamarin.Forms
-      - [创建你的第一个应用](platforms/xamarin-forms)
+      - [创建你的第一个应用](platforms/xamarin-forms/creating-your-first-prism-app.md)
       - Behaviors
         - [使用 Behaviors](platforms/xamarin-forms/behaviors/index.md)
         - [EventToCommandBehavior](platforms/xamarin-forms/behaviors/eventtocommandbehavior.md)

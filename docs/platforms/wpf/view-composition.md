@@ -1,130 +1,130 @@
-# Composing the User Interface Using the Prism Library for WPF
+# 使用 WPF 的 Prism 库编写用户界面
 
-A composite application user interface (UI) is composed from loosely coupled visual components known as **views** that are typically contained in the application modules, but they do not need to be. If you divide your application into modules, you need some way to loosely compose the UI, but you might choose to use this approach even if the views are not in modules. To the user, the application presents a seamless user experience and delivers a fully integrated application.
+复合应用程序用户界面 （UI） 由松散耦合的可视组件（称为 **视图** ）组成，这些组件通常包含在应用程序模块中，但它们不需要。如果将应用程序划分为多个模块，则需要某种方法来松散地组合 UI，但即使视图不在模块中，也可以选择使用此方法。对于用户来说，该应用程序提供了无缝的用户体验，并提供了一个完全集成的应用程序。
 
-To compose your UI, you need an architecture that allows you to create a layout composed of loosely coupled visual elements generated at run time. Additionally, the architecture should provide strategies for these visual elements to communicate in a loosely coupled fashion.
+若要编写 UI，需要一种体系结构，该体系结构允许您创建由运行时生成的松散耦合的视觉元素组成的布局。此外，架构应为这些视觉元素提供以松散耦合方式进行通信的策略。
 
-An application UI can be built by using one of the following paradigms:
+可以使用以下范例之一生成应用程序 UI：
 
-- All required controls for a form are contained in a single Extensible Application Markup Language (**XAML**) file, composing the form at design time.
-- Logical areas of the form are separated into distinct parts, typically user controls. The parts are referenced by the form, and the form is composed at design time.
-- Logical areas of the form are separated into distinct parts, typically user controls. The parts are unknown to the form and are dynamically added to the form at run time. Applications that use this methodology are known as composite applications using UI composition patterns.
+- 窗体的所有必需控件都包含在单个可扩展应用程序标记语言 （**XAML**） 文件中，在设计时组成窗体。
+- 窗体的逻辑区域被分成不同的部分，通常是用户控件。部件由窗体引用，窗体在设计时组成。
+- 窗体的逻辑区域被分成不同的部分，通常是用户控件。这些部件对窗体是未知的，并在运行时动态添加到窗体中。使用此方法的应用程序称为使用 UI 组合模式的复合应用程序。
 
-Below is a picture of an app. It is composed by loading multiple views that come from different modules into regions exposed by the shell, as shown in the following illustration.
+下面是一个应用程序的图片。它是通过将来自不同模块的多个视图加载到 shell 公开的区域中来组成的，如下图所示。
 
 ![Sample app with regions and views](images/Ch7UIFig1.png)
 
-## UI Layout Concepts
+## UI 布局概念
 
-The ```shell``` is typically the main application window and it is comprised of regions. Regions are mostly contained within ```ContentControl```'s, ```ItemControl```'s and ```TabControl```'s, and the shell has no knowledge of what is implemented in the ```region```. Inside the ```region``` are views. The view is the implementation of a specific portion of the UI and is decoupled from other parts of the application.
+```shell``` 通常是应用程序主窗口，它由区域组成。区域大多包含在 ```ContentControl```, ```ItemControl``` 和 ```TabControl``` 中, 而shell对 ```region``` 内实现的内容不知情。 ```region```内部是视图。视图是UI的一个特定部分的实现，并且与应用程序的其他部分解耦。
 
-The following sections introduce the high-level core concepts for composite application development.
+以下各节介绍复合应用程序开发的高级核心概念。
 
 ### Shell
 
-The shell is the application root object that contains the primary UI content. In a Windows Presentation Foundation (WPF) application, the shell is the ```Window``` object.
+shell 是包含主要 UI 内容的应用程序根对象。在 Windows Presentation Foundation （WPF） 应用程序中，shell 是 ```Window``` 对象。
 
-The shell plays the role of a master page providing the layout structure for the application. The shell contains one or more named regions where modules can specify the views that will appear. It can also define certain top-level UI elements, such as the background, main menu, and toolbar.
+shell 扮演母版页的角色，为应用程序提供布局结构。shell 包含一个或多个命名区域，模块可以在其中指定将显示的视图。它还可以定义某些顶级 UI 元素，例如背景、主菜单和工具栏。
 
-The shell defines the overall appearance of the application. It might define styles and borders that are present and visible in the shell layout itself, and it might also define styles, templates, and themes that will be applied to the views that are plugged into the shell.
+shell 定义应用程序的整体外观。它可以定义 shell 布局本身中存在和可见的样式和边框，还可以定义将应用于插入 shell 的视图的样式、模板和主题。
 
-Typically, the shell is a part of the WPF application project. The assembly that contains the shell might or might not reference the assemblies that contain the views to be loaded in the shell's regions.
+通常，shell 是 WPF 应用程序项目的一部分。包含 shell 的程序集可能引用也可能不引用包含要在 shell 区域中加载的视图的程序集。
 
 ### Views
 
-Views are the main unit of UI construction within a composite application. You can define a view as a user control, page, data template, or custom control. A view encapsulates a portion of your UI that you would like to keep as decoupled as possible from other parts of the application. You can choose what goes in a view based on encapsulation or a piece of functionality, or you can choose to define something as a view because you will have multiple instances of that view in your application.
+视图是复合应用程序中 UI 构造的主要单元。可以将视图定义为用户控件、页面、数据模板或自定义控件。视图封装了 UI 的一部分，您希望将其与应用程序的其他部分尽可能地分离。您可以根据封装或某个功能选择视图中的内容，也可以选择将某些内容定义为视图，因为应用程序中将有该视图的多个实例。
 
-Because of the content model of WPF, there is nothing specific to the Prism Library required to define a view. The easiest way to define a view is to define a user control. To add a view to the UI, you simply need a way to construct it and add it to a container. WPF provides mechanisms to do this. The Prism Library adds the ability to define a region into which a view can be dynamically added at run time.
+由于 WPF 的内容模型，定义视图不需要特定于 Prism 库的内容。定义视图的最简单方法是定义用户控件。若要将视图添加到 UI，只需一种方法来构造它并将其添加到容器中。WPF 提供了执行此操作的机制。Prism 库增加了定义可在运行时动态添加视图的区域的功能。
 
 #### Composite Views
 
-A view that supports specific functionality can become complicated. In that case, you might want to divide the view into several child views and have the parent view handle constructing itself by using the child views as parts. The application might do this statically at design time, or it might support having modules add child views through a contained region at run time. When you have a view that is not fully defined in a single view class, you can refer to that as a composite view. In many situations, a composite view is responsible for constructing the child views and for coordinating the interactions between them. You can design child views that are more loosely coupled from their sibling views and their parent composite view by using the Prism Library commands and the event aggregator.
+支持特定功能的视图可能会变得复杂。在这种情况下，您可能希望将视图划分为多个子视图，并让父视图通过将子视图用作部件来处理自身构造。应用程序可能在设计时静态执行此操作，也可能支持在运行时通过包含的区域添加模块视图。如果视图未在单个视图类中完全定义，则可以将其称为复合视图。在许多情况下，复合视图负责构造子视图并协调它们之间的交互。您可以使用 Prism Library 命令和事件聚合器设计与其同级视图及其父复合视图更松散耦合的子视图。
 
 ### Regions
 
-Regions are enabled in the Prism Library through a region manager, regions, and region adapters.
+通过区域管理器、区域和区域适配器在 Prism Library 中启用区域。
 
 #### Region Manager
 
-The ```RegionManager``` class is responsible for creating and maintaining a collection of regions for the host controls. The ```RegionManager``` uses a control-specific adapter that associates a new region with the host control. The following illustration shows the relationship between the region, control, and adapter set up by the ```RegionManager```.
+```RegionManager``` 类负责创建和维护宿主控件的区域集合。 ```RegionManager``` 使用特定于控件的适配器，该适配器将新区域与主机控件相关联。下图显示了 ```RegionManager``` 设置的区域、控件和适配器之间的关系。
 
 ![Region, control, and adapter relationship](images/Ch7UIFig2.png)
 
-The ```RegionManager``` can create regions in code or in XAML. The ```RegionManager.RegionName``` attached property is used to create a region in XAML by applying the attached property to the host control.
+可以在 ```RegionManager``` 代码或 XAML 中创建区域。 ```RegionManager.RegionName``` 附加属性用于通过将附加属性应用于宿主控件，在 XAML 中创建区域。
 
-Applications can contain one or more instances of a ```RegionManager```. You can specify the ```RegionManager``` instance into which you want to register the region. This is useful if you want to move the control around in the visual tree and do not want the region to be cleared when the attached property value is removed.
+应用程序可以包含 ```RegionManager``` .您可以指定要将区域注册到的 ```RegionManager``` 实例。如果要在可视化树中移动控件，并且不希望在删除附加属性值时清除该区域，这将非常有用。
 
-The ```RegionManager``` provides a RegionContext attached property that permits its regions to share data.
+```RegionManager``` 提供了一个 RegionContext 附加属性，该属性允许其区域共享数据。
 
 #### Region Implementation
 
-A region is a class that implements the ```IRegion``` interface. The term _region_ represents a container that can hold dynamic data that is presented in a UI. A region allows the Prism Library to place dynamic content contained in modules in predefined placeholders in a UI container.
+区域是实现接口的 ```IRegion``` 类。术语“区域”表示可以保存 UI 中呈现的动态数据的容器。区域允许 Prism Library 将模块中包含的动态内容放置在 UI 容器的预定义占位符中。
 
-Regions can hold any type of UI content. A module can contain UI content presented as a user control, a data type that is associated with a data template, a custom control, or any combination of these. This lets you define the appearance for the UI areas and then have modules place content in these predetermined areas.
+区域可以包含任何类型的 UI 内容。模块可以包含以用户控件形式呈现的 UI 内容、与数据模板关联的数据类型、自定义控件或这些内容的任意组合。这允许您定义 UI 区域的外观，然后让模块将内容放置在这些预定区域中。
 
-A region can contain zero or more items. Depending on the type of host control the region is managing, one or more of the items could be visible. For example, a ```ContentControl``` can display only a single object. However, the region in which it is located can contain many items, and an ```ItemsControl``` can display multiple items. This allows each item in the region to be visible in the UI.
+一个区域可以包含零个或多个项目。根据区域所管理的主机控件的类型，一个或多个项目可能可见。例如，一个 ```ContentControl``` 只能显示单个对象。但是，它所在的区域可以包含许多项目，并且 ```ItemsControl``` 可以显示多个项目。这允许区域中的每个项目在 UI 中可见。
 
-In the following illustration, the sample app shell contains four regions: **MainRegion**, **MainToolbarRegion**, **ResearchRegion**, and **ActionRegion**. These regions are populated by the various modules in the application—the content can be changed at any time.
+在下图中，示例应用 shell 包含四个区域： **MainRegion** 、 **MainToolbarRegion** 、 **ResearchRegion** 和 **ActionRegion** 。这些区域由应用程序中的各个模块填充，内容可以随时更改。
 
 ![Sample app regions](images/Ch7UIFig3.png)
 
-##### Module User Control to Region Mapping
+##### 模块用户控制到区域映射
 
-To demonstrate how modules and content are associated with regions, see the following illustration. It shows the association of ```WatchModule``` and the ```NewsModule``` with the corresponding regions in the shell.
+若要演示模块和内容如何与区域关联，请参见下面的插图。它显示了 ```WatchModule``` 和 ```NewsModule``` 如何与外壳中的相应区域关联。
 
-The **MainRegion** contains the ```WatchListView``` user control, which is contained in the ```WatchModule```. The **ResearchRegion** also contains the ```ArticleView``` user control, which is contained in the ```NewsModule```.
+**MainRegion** 包含 ```WatchListView``` 用户控件，该控件包含在 ```WatchModule``` 中， **ResearchRegion** 还包含 ```ArticleView``` 用户控件，该控件包含在 ```NewsModule``` 。
 
-In applications created with the Prism Library, mappings like this will be a part of the design process because designers and developers use them to determine what content is proposed to be in a specific region. This allows designers to determine the overall space needed and any additional items that must be added to ensure that the content will be viewable in the allowable space.
+在使用 Prism 库创建的应用程序中，此类映射将成为设计过程的一部分，因为设计人员和开发人员使用它们来确定建议在特定区域中放置的内容。这允许设计人员确定所需的总空间以及必须添加的任何其他项目，以确保内容在允许的空间中可见。
 
 ![Module user control to region mapping](images/Ch7UIFig4.png)
 
-#### Default Region Functionality
+#### 默认区域功能
 
-While you do not need to fully understand region implementations to use them, it might be useful to understand how controls and regions are associated and the default region functionality: for example, how a region locates and instantiates views, how views can be notified when they are the active view, or how view lifetime can be tied to activation.
+虽然您不需要完全了解区域实现即可使用它们，但了解控件和区域的关联方式以及默认区域功能可能会很有用：例如，区域如何定位和实例化视图，如何在视图为活动视图时通知视图，或者视图生存期如何与激活相关联。
 
-The following sections describe the region adapter and region behaviors.
+以下各节介绍区域适配器和区域行为。
 
 ##### Region Adapter
 
-To expose a UI control as a region, it must have a region adapter. Region adapters are responsible for creating a region and associating it with the control. This allows you to use the ```IRegion``` interface to manage the UI control contents in a consistent way. Each region adapter adapts a specific type of UI control. The Prism Library provides the following three region adapters:
+若要将 UI 控件公开为区域，它必须具有区域适配器。区域适配器负责创建区域并将其与控件关联。这允许您使用界面 ```IRegion``` 以一致的方式管理 UI 控件内容。每个区域适配器都采用特定类型的 UI 控件。Prism Library 提供以下三个区域适配器：
 
-- ```ContentControlRegionAdapter```. This adapter adapts controls of type ```System.Windows.Controls.ContentControl``` and derived classes.
-- ```SelectorRegionAdapter```. This adapter adapts controls derived from the class ```System.Windows.Controls.Primitives.Selector```, such as the ```System.Windows.Controls.TabControl``` control.
-- ```ItemsControlRegionAdapter```. This adapter adapts controls of type ```System.Windows.Controls.ItemsControl``` and derived classes.
+- ```ContentControlRegionAdapter```. 此适配器调整类型 ```System.Windows.Controls.ContentControl``` 和派生类的控件。
+- ```SelectorRegionAdapter```. 此适配器调整派生自类 ```System.Windows.Controls.Primitives.Selector``` 的控件，例如控件 ```System.Windows.Controls.TabControl``` 。
+- ```ItemsControlRegionAdapter```. 此适配器调整类型 ```System.Windows.Controls.ItemsControl``` 和派生类的控件。
 
 ##### Region Behaviors
 
-The Prism Library introduces the concept of region behaviors. These are pluggable components that give a region most of its functionality. Region behaviors were introduced to support view discovery and region context (described later in this topic). Additionally, behaviors provide an effective way to extend a region's implementation.
+Prism Library 介绍了区域行为的概念。这些是可插拔组件，可为区域提供大部分功能。引入了区域行为以支持视图发现和区域上下文（本主题稍后将介绍）。此外，行为还提供了一种扩展区域实现的有效方法。
 
-A region behavior is a class that is attached to a region to give the region additional functionality. This behavior is attached to the region and remains active for the lifetime of the region. For example, when an ```AutoPopulateRegionBehavior``` is attached to a region, it automatically instantiates and adds any ```ViewTypes``` that are registered against regions with that name. For the lifetime of the region, it keeps monitoring the ```RegionViewRegistry``` for new registrations. It is easy to add custom region behaviors or replace existing behaviors, either on a system-wide or a per-region basis.
+区域行为是附加到区域的类，用于为区域提供附加功能。此行为附加到该区域，并在该区域的生存期内保持活动状态。例如，当一个 ```AutoPopulateRegionBehavior``` 附加到某个区域时，它会自动实例化并添加针对具有该名称的区域注册的任何 ```ViewTypes``` 内容。在该地区的整个生命周期内，它会持续监控新注册。 ```RegionViewRegistry``` 在系统范围或每个区域的基础上，可以轻松添加自定义区域行为或替换现有行为。
 
-The next sections describe the default behaviors that are automatically added to all regions. One behavior, the ```SelectorItemsSourceSyncBehavior```, is only attached to controls that derive from the ```Selector```.
+接下来的部分将介绍自动添加到所有区域的默认行为。一种行为 ```SelectorItemsSourceSyncBehavior``` ， 仅附加到派生自 的 ```Selector``` 控件。
 
 ##### Registration Behavior
 
-The ```RegionManagerRegistrationBehavior``` is responsible for making sure that the region is registered to the correct ```RegionManager```. When a view or control is added to the visual tree as a child of another control or region, any region defined in the control should be registered in the ```RegionManager``` of the parent control. When the child control is removed, the registered region is unregistered.
+负责 ```RegionManagerRegistrationBehavior``` 确保将区域注册到正确的 ```RegionManager``` .当视图或控件作为另一个控件或区域的子项添加到可视化树时，控件中定义的任何区域都应注册到父控件的视图或控件中 ```RegionManager``` 。删除子控件时，已注册的区域将未注册。
 
 ##### Auto-Population Behavior
 
-There are two classes responsible for implementing view discovery. One of them is the ```AutoPopulateRegionBehavior```. When it is attached to a region, it retrieves all view types that are registered under the name of the region. It then creates instances of those views and adds them to the region. After the region is created, the ```AutoPopulateRegionBehavior``` monitors the ```RegionViewRegistry``` for any newly registered view types for that region name.
+有两个类负责实现视图发现。其中之一是 ```AutoPopulateRegionBehavior``` .当它附加到区域时，它会检索在区域名称下注册的所有视图类型。然后，它会创建这些视图的实例，并将它们添加到区域中。创建区域后，将 ```AutoPopulateRegionBehavior``` 监视 ```RegionViewRegistry``` 该区域名称的任何新注册视图类型。
 
-If you want to have more control over the view discovery process, consider creating your own implementation of the ```IRegionViewRegistry``` and the ```AutoPopulateRegionBehavior```.
+如果要更好地控制视图发现过程，请考虑创建自己的 ```IRegionViewRegistry``` 和 ```AutoPopulateRegionBehavior``` 的实现。
 
 ##### Region Context Behaviors
 
-The region context functionality is contained within two behaviors: the ```SyncRegionContextWithHostBehavior``` and the ```BindRegionContextToDependencyObjectBehavior```. These behaviors are responsible for monitoring changes to the context that were made on the region, and then synchronizing the context with a context dependency property attached to the view.
+区域上下文功能包含在两个行为中： ```SyncRegionContextWithHostBehavior``` 和 ```BindRegionContextToDependencyObjectBehavior``` 。这些行为负责监视对区域上所做的上下文更改，然后将上下文与附加到视图的上下文依赖项属性同步。
 
 ##### Activation Behavior
 
-The ```RegionActiveAwareBehavior``` is responsible for notifying a view if it is active or inactive. The view must implement ```IActiveAware``` to receive these change notifications. This active aware notification is one-directional (it travels from the behavior to the view). The view cannot affect its active state by changing the active property on the ```IActiveAware``` interface.
+负责 ```RegionActiveAwareBehavior``` 通知视图是处于活动状态还是非活动状态。视图必须实现 ```IActiveAware``` 才能接收这些更改通知。此活动感知通知是单向的（它从行为传输到视图）。视图不能通过更改 ```IActiveAware``` 接口上的活动属性来影响其活动状态。
 
 ##### Region Lifetime Behavior
 
-The ```RegionMemberLifetimeBehavior``` is responsible for determining if an item should be removed from the region when it is deactivated. The ```RegionMemberLifetimeBehavior``` monitors the region's ```ActiveViews``` collection to discover items that transition into a deactivated state. The behavior checks the removed items for ```IRegionMemberLifetime``` or the ```RegionMemberLifetimeAttribute``` (in that order) to determine if it should be kept alive on removal.
+负责 ```RegionMemberLifetimeBehavior``` 确定在停用项目时是否应将其从区域中删除。监视 ```RegionMemberLifetimeBehavior``` 区域 ```ActiveViews``` 的集合，以发现过渡到停用状态的项目。该行为检查已删除的项目 ```IRegionMemberLifetime``` 或 ```RegionMemberLifetimeAttribute``` （按该顺序）以确定是否应在删除时保持活动状态。
 
-If the item in the collection is a ```System.Windows.FrameworkElement```, it will also check its ```DataContext``` for ```IRegionMemberLifetime``` or the ```RegionMemberLifetimeAttribute```.
+如果集合中的项是一个 ```System.Windows.FrameworkElement``` ，它还会检查其 ```DataContext``` 是否有 ```IRegionMemberLifetime``` 或 ```RegionMemberLifetimeAttribute``` 。
 
-The region items are checked in the following order:
+按以下顺序检查区域项目：
 
 1. ```IRegionMemberLifetime.KeepAlive``` value
 1. ```DataContext```'s ```IRegionMemberLifetime.KeepAlive``` value
@@ -133,73 +133,73 @@ The region items are checked in the following order:
 
 ##### Control-Specific Behaviors
 
-The ```SelectorItemsSourceSyncBehavior``` is used only for controls that derive from ```Selector```, such as a tab control in WPF. It is responsible for synchronizing the views in the region with the items of the selector, and then synchronizing the active views in the region with the selected items of the selector.
+仅 ```SelectorItemsSourceSyncBehavior``` 用于派生自 ```Selector``` 的控件，如 WPF 中的选项卡控件。它负责将区域中的视图与选择器的项目同步，然后将区域中的活动视图与选择器的选定项目同步。
 
 #### Extending the Region Implementation
 
-The Prism Library provides extension points that allow you to customize or extend the default behavior of the provided APIs. For example, you can write your own region adapters, region behaviors, or change the way the Navigation API parses URIs.
+Prism 库提供了扩展点，允许您自定义或扩展所提供 API 的默认行为。例如，您可以编写自己的区域适配器、区域行为或更改导航 API 分析 URI 的方式。
 
 ### View Composition
 
-View composition is the constructing of a view. In composite applications, views from multiple modules have to be displayed at run time in specific locations within the application UI. To achieve this, you need to define the locations where the views will appear and how the views will be created and displayed in those locations.
+视图组合是视图的构造。在复合应用程序中，来自多个模块的视图必须在运行时显示在应用程序 UI 中的特定位置。为此，您需要定义视图的显示位置，以及如何在这些位置创建和显示视图。
 
-Views can be created and displayed in the locations either automatically through view discovery, or programmatically through view injection. These two techniques determine how individual views are mapped to named locations within the application UI.
+可以通过视图发现自动创建视图并显示视图，也可以通过视图注入以编程方式创建视图并显示视图。这两种技术决定了如何将各个视图映射到应用程序 UI 中的命名位置。
 
 #### View Discovery
 
-In view discovery, you set up a relationship in the ```RegionViewRegistry``` between a region's name and the type of a view. When a region is created, the region looks for all the ```ViewTypes``` associated with the region and automatically instantiates and loads the corresponding views. Therefore, with view discovery, you do not have explicit control over when the views that correspond to a region are loaded and displayed.
+在视图发现中，您可以在区域名称和视图类型 ```RegionViewRegistry``` 之间建立关系。创建区域时，该区域会查找与该区域 ```ViewTypes``` 关联的所有视图，并自动实例化和加载相应的视图。因此，使用视图发现时，您无法显式控制何时加载和显示与区域对应的视图。
 
 #### View Injection
 
-In view injection, your code obtains a reference to a region, and then programmatically adds a view into it. Typically, this is done when a module initializes or as a result of a user action. Your code will query a ```RegionManager``` for a specific region by name and then inject views into it. With view injection, you have more control over when views are loaded and displayed. You also have the ability to remove views from the region. However, with view injection, you cannot add a view to a region that has not yet been created.
+在视图注入中，代码获取对区域的引用，然后以编程方式将视图添加到其中。通常，这是在模块初始化或作为用户操作的结果时完成的。您的代码将按名称查询特定区域， ```RegionManager``` 然后将视图注入其中。通过视图注入，您可以更好地控制何时加载和显示视图。您还可以从该区域移除视图。但是，使用视图注入时，无法将视图添加到尚未创建的区域。
 
 #### Navigation
 
-The Prism Library 8 contains Navigation APIs. The Navigation APIs simplify the view injection process by allowing you to navigate a region to an URI. The Navigation API instantiates the view, adds it to the region, and then activates it. Additionally, the Navigation API allows navigating back to a previously created view contained in a region. For more information about the Navigation APIs, see [Basic Region Navigation](xref:Navigation.Regions.GettingStarted).
+Prism Library 8 包含导航 API。导航 API 允许您将区域导航到 URI，从而简化视图注入过程。导航 API 实例化视图，将其添加到区域，然后激活它。此外，导航 API 允许导航回区域中包含的先前创建的视图。有关导航 API 的更多信息，请参阅 [Basic Region Navigation](xref:Navigation.Regions.GettingStarted).
 
-#### When to Use View Discovery vs. View Injection
+#### 何时使用视图发现与视图注入
 
-Choosing which view loading strategy to use for a region depends on the application requirements and the function of the region.
+选择要用于某个区域的视图加载策略取决于应用程序要求和该区域的功能。
 
-Use view discovery in the following situations:
+在以下情况下使用视图发现：
 
-- Automatic view loading is desired or required.
-- Single instances of a view will be loaded into the region.
+- 需要或需要自动加载视图。
+- 视图的单个实例将加载到该区域中。
 
-Use view injection in the following situations:
+在以下情况下使用视图注入：
 
-- Your application uses the Navigation APIs.
-- You need explicit or programmatic control over when a view is created and displayed, or you need to remove a view from a region; for example, as a result of application logic or navigation.
-- You need to display multiple instances of the same views in a region, where each view instance is bound to different data.
-- You need to control which instance of a region a view is added to. For example, you want to add a customer detail view to a specific customer detail region. (This scenario requires implementing scoped regions as described later in this topic.)
+- 应用程序使用导航 API。
+- 您需要对何时创建和显示视图进行显式或编程控制，或者需要从区域中删除视图;例如，作为应用程序逻辑或导航的结果。
+- 您需要在一个区域中显示同一视图的多个实例，其中每个视图实例绑定到不同的数据。
+- 您需要控制将视图添加到区域的哪个实例。例如，您希望将客户详细信息视图添加到特定的客户详细信息区域。(此方案需要实现作用域内区域，如本主题后面所述。)
 
-## UI Layout Scenarios
+## UI 布局方案
 
-In composite applications, views from multiple modules are displayed at run time in specific locations within the application UI. To achieve this, you need to define the locations where the views will appear and how the views will be created and displayed in those locations.
+在复合应用程序中，来自多个模块的视图在运行时显示在应用程序 UI 中的特定位置。为此，您需要定义视图的显示位置，以及如何在这些位置创建和显示视图。
 
-The decoupling of the view and the location in the UI in which it will be displayed allows the appearance and layout of the application to evolve independently of the views that appear within the region.
+视图与 UI 中显示视图的位置分离后，应用程序的外观和布局可以独立于区域中显示的视图而发展。
 
-The next sections describe the core scenarios you will encounter when you develop a composite application.
+接下来的部分介绍在开发复合应用程序时将遇到的核心方案。
 
 ### Implementing the Shell
 
-The shell is the application root object in which the primary UI content is contained. In a WPF application, the shell is the ```Window``` object.
+shell 是包含主 UI 内容的应用程序根对象。在 WPF 应用程序中，shell 是 ```Window``` 对象。
 
-A shell can contain named regions where modules can specify the views that will appear. It can also define certain top-level UI elements, such as the main menu and toolbar. The shell defines the overall structure and appearance for the application, and is similar to an ASP.NET master page control. It could define styles and borders that are present and visible in the shell layout itself, and it could also define styles, templates, and themes that are applied to the views that are plugged into the shell.
+shell 可以包含命名区域，模块可以在其中指定将显示的视图。它还可以定义某些顶级 UI 元素，例如主菜单和工具栏。shell 定义应用程序的整体结构和外观，类似于 ASP.NET 母版页控件。它可以定义 shell 布局本身中存在和可见的样式和边框，还可以定义应用于插入 shell 的视图的样式、模板和主题。
 
-You do not need to have a distinct shell as part of your application architecture to use the Prism Library. If you are building a completely new composite application, implementing a shell provides a well-defined root and initialization pattern for setting up the main UI of your application. However, if you are adding Prism Library features to an existing application, you do not have to change the basic architecture of your application to add a shell. Instead, you can alter your existing window definitions or controls to add regions that can pull in views as needed.
+您无需在应用程序体系结构中具有单独的 shell 即可使用 Prism 库。如果要构建一个全新的复合应用程序，则实现 shell 会提供明确定义的根和初始化模式，用于设置应用程序的主 UI。但是，如果要向现有应用程序添加棱镜库功能，则无需更改应用程序的基本体系结构即可添加 shell。相反，您可以更改现有的窗口定义或控件，以添加可以根据需要拉取视图的区域。
 
-You can also have more than one shell in your application. If your application is designed to open more than one top-level window for the user, each top-level window acts as shell for the content it contains.
+应用程序中还可以有多个 shell。如果应用程序设计为用户打开多个顶级窗口，则每个顶级窗口都充当其包含的内容的 shell。
 
 #### Sample Shell
 
-This sample has a shell as its main window. In the following illustration, the shell and views are highlighted. The shell is the main window that appears when the app starts and which contains all the views. It defines the regions into which modules add their views and a couple of top-level UI items, including the title and the Watch List tear-off banner.
+此示例将 shell 作为其主窗口。在下图中，突出显示了 shell 和视图。shell 是应用程序启动时显示的主窗口，其中包含所有视图。它定义了模块将其视图添加到其中的区域和几个顶级 UI 项，包括标题和监视列表撕下横幅。
 
 ![Sample shell window, regions, and views](images/Ch7UIFig1.png)
 
-The shell implementation in the app is provided by Shell.xaml, its code-behind file Shell.xaml.cs, and its view model ShellViewModel.cs. Shell.xaml includes the layout and UI elements that are part of the shell, including definitions of regions to which modules add their views.
+应用中的 shell 实现由 Shell.xaml、其代码隐藏文件Shell.xaml.cs及其视图模型ShellViewModel.cs提供。Shell.xaml 包括作为 shell 一部分的布局和 UI 元素，包括模块向其添加视图的区域的定义。
 
-The following XAML shows the structure and main XAML elements that define the shell. Notice that the ```RegionName``` attached property is used to define the four regions and that the window background image provides a background for the shell.
+以下 XAML 显示了定义 shell 的结构和主要 XAML 元素。请注意， ```RegionName``` 附加属性用于定义四个区域，窗口背景图像为 shell 提供背景。
 
 ```xml
 <!--Shell.xaml (WPF) -->
@@ -247,7 +247,7 @@ The following XAML shows the structure and main XAML elements that define the sh
 </Window>
 ```
 
-The implementation of the ```Shell``` code-behind file is very simple. The ```Shell``` is exported so that when your ```App``` object creates it, its dependencies will be added.
+``Shell`` 代码隐藏文件的实现非常简单。导出 ， ```Shell``` 以便在创建 ```App``` 对象时添加其依赖项。
 
 ```cs
 // Shell.xaml.cs
@@ -261,39 +261,39 @@ public partial class Shell : Window
 }
 ```
 
-The minimal code in the code-behind file illustrates the power and simplicity of the composite application architecture and loose coupling between the shell and its constituent views.
+代码隐藏文件中的最小代码说明了复合应用程序体系结构的强大功能和简单性，以及 shell 与其组成视图之间的松散耦合。
 
-### Defining Regions
+### 定义 Regions
 
-You define where views will appear by defining a layout with named locations, known as regions. Regions act as placeholders for one or more views that will be displayed at run time. Modules can locate and add content to regions in the layout without knowing how and where the region is displayed. This allows the layout to change without affecting the modules that add the content to the layout.
+您可以通过定义具有命名位置（称为区域）的布局来定义视图的显示位置。区域充当将在运行时显示的一个或多个视图的占位符。模块可以在布局中查找和添加内容，而无需知道区域的显示方式和位置。这允许更改布局，而不会影响将内容添加到布局的模块。
 
-Regions are defined by assigning a region name to a WPF control, either in XAML as shown in the previous Shell.xaml file or in code. Regions can be accessed by their region name. At run time, views are added to the named Region control, which then displays the view or views according to the layout strategy that the views implement. For example, a tab control region will lay out its child views in a tabbed arrangement. Regions support the addition or removal of views. Views can be created and displayed in regions either programmatically or automatically. In the Prism Library, the former is achieved through view injection and the latter through view discovery. These two techniques determine how individual views are mapped to the named regions within the application UI.
+通过在 XAML 中将区域名称分配给 WPF 控件来定义区域，如前面的 Shell.xaml 文件或代码中所示。可以通过区域名称访问区域。在运行时，视图将添加到命名的 Region 控件中，然后该控件根据视图实现的布局策略显示一个或多个视图。例如，选项卡控件区域将以选项卡式排列方式布局其子视图。区域支持添加或删除视图。可以通过编程或自动方式在区域中创建和显示视图。在棱镜库中，前者是通过视图注入实现的，后者是通过视图发现实现的。这两种技术确定如何将各个视图映射到应用程序 UI 中的命名区域。
 
-The shell of the application defines the application layout at the highest level; for example, by specifying the locations for the main content and the navigation content, as shown in the following illustration. Layout within these high-level views is similarly defined, allowing the overall UI to be recursively composed.
+应用程序的 shell 在最高级别定义应用程序布局;例如，通过指定主要内容和导航内容的位置，如下图所示。这些高级视图中的布局也以类似的方式定义，允许以递归方式组合整个 UI。
 
 ![A template shell](images/Ch7UIFig6.png)
 
-Regions are sometimes used to define locations for multiple views that are logically related. In this scenario, the region control is typically an ```ItemsControl```-derived control that will display the views according to the layout strategy that it implements, such as in a stacked or tabbed layout arrangement.
+区域有时用于定义逻辑上相关的多个视图的位置。在此方案中，区域控件通常是一个 ```ItemsControl``` 派生控件，它将根据其实现的布局策略（如在堆叠或选项卡式布局排列中）显示视图。
 
-Regions can also be used to define a location for a single view; for example, by using a ```ContentControl```. In this scenario, the region control displays only one view at a time, even if more than one view is mapped to that region location.
+区域还可用于定义单个视图的位置;例如，通过使用 ```ContentControl``` .在此方案中，区域控件一次只显示一个视图，即使多个视图映射到该区域位置也是如此。
 
-#### Sample App Shell Regions
+#### App Shell Regions 示例
 
 ![Sample app shell regions](images/Ch7UIFig3.png)
 
-A multiple-view layout is also demonstrated in the example app ui when the application is buying or selling a stock. The Buy/Sell area is a list-style region that shows multiple buy/sell views (**OrderCompositeView**) as part of its list, as shown in the following illustration.
+当应用程序买入或卖出股票时，示例应用程序 UI 中还会演示多视图布局。“买入/卖出”区域是一个列表样式区域，显示多个买入/卖出视图 （**OrderCompositeView**） 作为其列表的一部分，如下图所示。
 
 ![ItemsControl region](images/Ch7UIFig8.png)
 
-The shell's **ActionRegion** contains the **OrdersView**. The **OrdersView** contains the **Submit All** and **Cancel All** buttons as well as the **OrdersRegion**. The **OrdersRegion** is attached to a **ListBox** control which displays multiple **OrderCompositeViews**.
+shell 的 **ActionRegion** 包含 **OrdersView** **。OrdersView** 包含“全部提交”和“全部取消”按钮以及 **OrdersRegion** **。OrdersRegion** 附加到一个 **ListBox** 控件，该控件显示多个 **OrderCompositeViews** 。
 
-#### Adding a Region in XAML
+#### 在 XAML 中添加 Region
 
-A region is a class that implements the ```IRegion``` interface. The region is the container that holds content to be displayed by a control.
+区域是实现接口的 ```IRegion``` 类。区域是保存控件要显示的内容的容器。
 
-The ```RegionManager``` supplies an attached property that you can use for simple region creation in XAML. To use the attached property, you must load the Prism Library namespace into the XAML and then use the ```RegionName``` attached property. The following example shows how to use the attached property in a window with an ```AnimatedTabControl```.
+它 ```RegionManager``` 提供了一个附加属性，可用于在 XAML 中创建简单的区域。若要使用附加属性，必须将 Prism Library 命名空间加载到 XAML 中，然后使用 ```RegionName``` 附加属性。下面的示例演示如何在带有 ```AnimatedTabControl``` 。
 
-Notice the use of the ```x:Static``` markup extension to reference the ```MainRegion``` string constant. This practice eliminates magic strings in the XAML.
+请注意，使用 ```x:Static``` 标记扩展来引用 ```MainRegion``` 字符串常量。这种做法消除了 XAML 中的魔术字符串。
 
 ```xml
 <!-- (WPF) -->
@@ -302,9 +302,9 @@ Notice the use of the ```x:Static``` markup extension to reference the ```MainRe
     prism:RegionManager.RegionName="{x:Static inf:RegionNames.MainRegion}"/>
 ```
 
-#### Adding a Region by Using Code
+#### 使用代码添加 Region
 
-The ```RegionManager``` can register regions directly without using XAML. The following code example shows how to add a region to a control from the code-behind file. First a reference to the region manager is obtained. Then, using the ```RegionManager``` static methods ```SetRegionManager``` and ```SetRegionName```, the region is attached to the UI's ```ActionContent``` control and then that region is named ```ActionRegion```.
+可以直接注册区域， ```RegionManager``` 而无需使用 XAML。下面的代码示例演示如何从代码隐藏文件向控件添加区域。首先，获取对区域管理器的引用。然后，使用 ```RegionManager``` 静态方法 ```SetRegionManager``` 和 ```SetRegionName``` 将区域附加到 UI的 ```ActionContent``` 的控件，然后将该区域命名为 ```ActionRegion``` 。
 
 ```cs
 IRegionManager regionManager = ServiceLocator.Current.GetInstance<IRegionManager>();
@@ -312,43 +312,43 @@ RegionManager.SetRegionManager(this.ActionContent, regionManager);
 RegionManager.SetRegionName(this.ActionContent, "ActionRegion");
 ```
 
-### Displaying Views in a Region When the Region Loads
+### 加载区域时显示区域中的视图
 
-With the view discovery approach, modules can register views (view models or presentation models) for a specific named location. When that location is displayed at run time, any views that have been registered for that location will be created and displayed within it automatically.
+使用视图发现方法，模块可以注册特定命名位置的视图（视图模型或表示模型）。在运行时显示该位置时，将自动创建已为该位置注册的任何视图，并在其中显示。
 
-Modules register views with a registry. The parent view queries this registry to discover the views that were registered for a named location. After they are discovered, the parent view places those views on the screen by adding them to the placeholder control.
+模块将视图注册到注册表。父视图查询此注册表以发现为命名位置注册的视图。发现这些视图后，父视图会通过将这些视图添加到占位符控件来将这些视图放在屏幕上。
 
-After the application is loaded, the composite view is notified to handle the placement of new views that have been added to the registry.
+加载应用程序后，将通知复合视图处理已添加到注册表的新视图的放置。
 
-The following illustration shows the view discovery approach.
+下图显示了视图发现方法。
 
 ![View discovery](images/Ch7UIFig9.png)
 
-The Prism Library defines a standard registry, ```RegionViewRegistry```, to register views for these named locations.
+Prism Library 定义了一个标准注册表 ```RegionViewRegistry``` ，用于注册这些命名位置的视图。
 
-To show a view in a region, register the view with the region manager, as shown in the following code example. You can directly register a view type with the region, in which case the view will be constructed by the dependency injection container and added to the region when the control hosting the region is loaded.
+若要在区域中显示视图，请向区域管理器注册该视图，如下面的代码示例所示。您可以直接向区域注册视图类型，在这种情况下，视图将由依赖项注入容器构造，并在加载托管该区域的控件时添加到该区域。
 
 ```cs
 // View discovery
 this.regionManager.RegisterViewWithRegion("MainRegion", typeof(EmployeeView));
 ```
 
-Optionally, you can provide a delegate that returns the view to be shown, as shown in the next example. The region manager will display the view when the region is created.
+（可选）您可以提供返回要显示的视图的委托，如下一个示例所示。创建区域时，区域管理器将显示视图。
 
 ```cs
 // View discovery
 this.regionManager.RegisterViewWithRegion("MainRegion", () => this.container.Resolve<EmployeeView>());
 ```
 
-### Displaying Views in a Region Programmatically
+### 以编程方式显示区域中的视图
 
-In the view injection approach, views are programmatically added or removed from a named location by the modules that manage them. To enable this, the application contains a registry of named locations in the UI. A module can use the registry to look up one of the locations and then programmatically inject views into it. To make sure that locations in the registry can be accessed similarly, each of the named locations adheres to a common interface used to inject the view. The following illustration shows the view injection approach.
+在视图注入方法中，管理视图的模块以编程方式在命名位置添加视图或从命名位置删除视图。若要启用此功能，应用程序在 UI 中包含命名位置的注册表。模块可以使用注册表查找其中一个位置，然后以编程方式将视图注入其中。为了确保可以以类似方式访问注册表中的位置，每个命名位置都遵循用于注入视图的通用接口。下图显示了视图注入方法。
 
 ![View injection](images/Ch7UIFig10.png)
 
-The Prism Library defines a standard registry, ```RegionManager```, and a standard interface, ```IRegion```, for access these locations.
+Prism Library 定义了一个标准注册表 ```RegionManager``` 和一个标准接口 ```IRegion``` ，用于访问这些位置。
 
-To use view injection to add a view to a region, get the region from the region manager, and then call the ```Add``` method, as shown in the following code. With view injection, the view is displayed only after the view is added to a region, which can happen when the module is loaded or when a user action completes a predefined action.
+若要使用视图注入将视图添加到区域，请从区域管理器获取该区域，然后调用该 ```Add``` 方法，如以下代码所示。使用视图注入时，仅在将视图添加到区域后才会显示视图，这可能在加载模块或用户操作完成预定义操作时发生。
 
 ```cs
 // View injection
@@ -359,27 +359,27 @@ region.Add(ordersView, "OrdersView");
 region.Activate(ordersView);
 ```
 
-#### Ordering Views in a Region
+#### 对区域中的视图进行排序
 
-Whether it uses view discovery or view Injection, an application might need to order how views appear in a ```TabControl```, ```ItemsControl```, or any other control that displays multiple active views. By default, views appear in the order that they were registered and added into the region.
+无论是使用视图发现还是视图注入，应用程序都可能需要对视图在 ```TabControl``` 、 ```ItemsControl``` 或显示多个活动视图的任何其他控件中的显示方式进行排序。默认情况下，视图按注册和添加到区域中的顺序显示。
 
-When a composite application is built, views are often registered from different modules. Declaring dependencies between modules can help alleviate the problem, but when modules and views do not have any real interdependencies, declaring an artificial dependency couples modules unnecessarily.
+构建复合应用程序时，通常会从不同的模块注册视图。声明模块之间的依赖关系可以帮助缓解问题，但是当模块和视图没有任何真正的相互依赖关系时，声明人为依赖关系会不必要地耦合模块。
 
-To allow views to participate in ordering themselves, the Prism Library provides the ```ViewSortHint``` attribute. This attribute contains a string ```Hint``` property that allows a view to declare a hint of how it should be ordered in the region.
+为了允许视图参与排序，棱镜库提供了该 ```ViewSortHint``` 属性。此属性包含一个字符串 ```Hint``` 属性，该属性允许视图声明在区域中应如何排序的提示。
 
-When displaying views, the ```Region``` class uses a default view sorting routine that uses the hint to order the views. This is a simple case-sensitive ordinal sort. Views that have the sort hint attribute are ordered ahead of those without. Also, those without the attribute appear in the order they were added to the region.
+显示视图时，该 ```Region``` 类使用默认视图排序例程，该例程使用提示对视图进行排序。这是一种简单的区分大小写的序数排序。具有排序提示属性的视图将排在前于没有排序提示属性的视图之前。此外，没有该属性的属性将按添加到区域的顺序显示。
 
-If you want to change how views are ordered, the ```Region``` class provides a ```SortComparison``` property that you can set with your own ```Comparison<_object_>``` delegate method. It is important to note that the ordering of the region's ```Views``` and ```ActiveViews``` properties are reflected in the UI because adapters such as the ```ItemsControlRegionAdapter``` bind directly to these properties. A custom region adapter could implement its own sorting and filter that will override how the region orders views.
+如果要更改视图的排序方式，该 ```Region``` 类提供了一个属性，您可以使用自己的 ```Comparison<_object_>``` 委托方法设置该 ```SortComparison``` 属性。请务必注意，区域 ```Views``` 和 ```ActiveViews``` 属性的顺序反映在 UI 中，因为适配器（如 ```ItemsControlRegionAdapter``` ）直接绑定到这些属性。自定义区域适配器可以实现自己的排序和筛选器，这些排序和筛选器将覆盖区域对视图进行排序的方式。
 
-### Sharing Data Between Multiple Regions
+### 在多个区域之间共享数据
 
-The Prism Library provides multiple approaches to communicating between views, depending on your scenario. The region manager provides the ```RegionContext``` property as one of these approaches.
+Prism Library 提供了多种在视图之间进行通信的方法，具体取决于您的方案。区域管理器 ```RegionContext``` 提供属性作为这些方法之一。
 
-```RegionContext``` is useful when you want to share context between a parent view and child views that are hosted in a region. ```RegionContext``` is an attached property. You set the value of the context on the region control so that it can be made available to all child views that are displayed in that region control. The region context can be any simple or complex object and can be a data-bound value. The ```RegionContext``` can be used with either view discovery or view injection.
+```RegionContext``` 当您想要在父视图和区域中托管的子视图之间共享上下文时，非常有用。 ```RegionContext``` 是附加属性。在区域控件上设置上下文的值，以便该上下文可用于该区域控件中显示的所有子视图。区域上下文可以是任何简单或复杂对象，也可以是数据绑定值。 ```RegionContext``` 可以与视图发现或视图注入一起使用。
 
->**Note:** The ```DataContext``` property in WPF is used to set the local data context for the view. It allows the view to use data binding to communicate with a view model, local presenter, or model. ```RegionContext``` is used to share context between multiple views and is not local to a single view. It provides a simple mechanism for sharing context between multiple views.
+>**注意:** WPF 中的 ```DataContext``` 属性用于设置视图的本地数据上下文。它允许视图使用数据绑定与视图模型、本地演示器或模型进行通信。 ```RegionContext``` 用于在多个视图之间共享上下文，而不是单个视图的本地上下文。它提供了一种在多个视图之间共享上下文的简单机制。
 
-The following code shows how the ```RegionContext``` attached property is used in XAML.
+下面的代码演示如何在 XAML 中使用 ```RegionContext``` 附加属性。
 
 ```xml
 <TabControl AutomationProperties.AutomationId="DetailsTabControl" 
@@ -388,13 +388,13 @@ The following code shows how the ```RegionContext``` attached property is used i
 ...>
 ```
 
-You can also set the ```RegionContext``` in code, as shown in the following example.
+还可以使用代码设置 ```RegionContext``` ，如以下示例所示。
 
 ```cs
 RegionManager.Regions["Region1"].Context = employeeId;
 ```
 
-To retrieve the ```RegionContext``` in a view, the ```GetObservableContext``` static method of the ```RegionContext``` class is used. It passes the view as a parameter and then accesses its ```Value``` property, as shown in the following code example.
+若要检索视图中的 ```RegionContext``` ，请使用 ```RegionContext``` 类的 ```GetObservableContext``` 静态方法。它将视图作为参数传递，然后访问其 ```Value``` 属性，如下面的代码示例所示。
 
 ```cs
 private void GetRegionContext()
@@ -403,7 +403,7 @@ private void GetRegionContext()
 }
 ```
 
-The value of the ```RegionContext``` can be changed from within a view by simply assigning a new value to its ```Value``` property. Views can opt to be notified of changes to the ```RegionContext``` by subscribing to the ```PropertyChanged``` event on the ```ObservableObject``` that is returned by the ```GetObservableContext``` method. This allows multiple views to be kept in synchronization when their ```RegionContext``` is changed. The following code example demonstrates subscribing to the ```PropertyChanged``` event.
+只需将新值分配给视图 ```Value``` 的属性，即可从视图中更改 的 ```RegionContext``` 值。视图可以选择 ```RegionContext``` 通过订阅 ```GetObservableContext``` 该方法返回 ```PropertyChanged``` 的事件 ```ObservableObject``` 来接收更改的通知。这允许多个视图在更改时 ```RegionContext``` 保持同步。下面的代码示例演示如何订阅该 ```PropertyChanged``` 事件。
 
 ```cs
 ObservableObject<object> viewRegionContext = 
@@ -422,19 +422,19 @@ private void ViewRegionContext_OnPropertyChangedEvent(object sender,
 }
 ```
 
->**Note:** The ```RegionContext``` is set as an attached property on the content object hosted in the region. This means that the content object has to derive from ```DependencyObject```. In the preceding example, the view is a visual control, which ultimately derives from ```DependencyObject```.
+>**注意:** 设置为 ```RegionContext``` 区域中托管的内容对象的附加属性。这意味着内容对象必须派生自 ```DependencyObject``` 。在前面的示例中，视图是一个可视化控件，它最终派生自 ```DependencyObject``` 。
 
->If you choose to use WPF data templates to define your view, the content object will represent the ```ViewModel``` or ```PresentationModel```. If your view model or presentation model needs to retrieve the ```RegionContext```, it will need to derive from the ```DependencyObject``` base class.
+>如果选择使用 WPF 数据模板来定义视图，则内容对象将表示 ```ViewModel``` 或 ```PresentationModel``` 。如果视图模型或表示模型需要检索 ```RegionContext``` ，则需要从 ```DependencyObject``` 基类派生。
 
-### Creating Multiple Instances of a Region
+### 创建区域的多个实例
 
-Scoped regions are available only with view injection. You should use them if you need a view to have its own instance of a region. Views that define regions with attached properties automatically inherit their parent's ```RegionManager```. Usually, this is the global ```RegionManager``` that is registered in the shell window. If the application creates more than one instance of that view, each instance would attempt to register its region with the parent ```RegionManager```. ```RegionManager``` allows only uniquely named regions; therefore, the second registration would produce an error.
+作用域区域仅通过视图注入可用。如果需要视图具有自己的区域实例，则应使用它们。定义具有附加属性的区域的视图会自动继承其父级的 ```RegionManager``` .通常，这是在 shell 窗口中注册的全局 ```RegionManager``` 。如果应用程序创建该视图的多个实例，则每个实例都将尝试向父 ```RegionManager``` 级注册其区域。 ```RegionManager``` 仅允许唯一命名的区域;因此，第二次注册将产生错误。
 
-Instead, use scoped regions so that each view will have its own ```RegionManager``` and its regions will be registered with that ```RegionManager``` rather than the parent ```RegionManager```, as shown in the following illustration.
+相反，请使用作用域区域，以便每个视图都有自己的 ```RegionManager``` 区域，并且其区域将注册到该 ```RegionManager``` 视图而不是父 ```RegionManager``` 级，如下图所示。
 
 ![Parent and scoped RegionManagers](images/Ch7UIFig11.png)
 
-To create a local ```RegionManager``` for a view, specify that a new ```RegionManager``` should be created when you add your view to a region, as illustrated in the following code example.
+若要为视图创建本地 ```RegionManager``` 视图，请指定在将视图添加到区域时应创建一个新 ```RegionManager``` 视图，如下面的代码示例所示。
 
 ```cs
 IRegion detailsRegion = this.regionManager.Regions["DetailsRegion"];
@@ -443,4 +443,4 @@ bool createRegionManagerScope = true;
 IRegionManager detailsRegionManager = detailsRegion.Add(view, null, createRegionManagerScope);
 ```
 
-The ```Add``` method will return the new ```RegionManager``` that the view can retain for further access to the local scope.
+该 ```Add``` 方法将返回视图可以保留的新内容 ```RegionManager``` ，以便进一步访问本地范围。
