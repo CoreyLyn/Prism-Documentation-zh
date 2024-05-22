@@ -7,4 +7,4 @@ Prism 是一个用于构建松耦合、可维护且可测试的 XAML 应用程�
 > [Prism 官方文档](https://docs.prismlibrary.com/docs/) 的中文版本。
 
 ## 在线阅读地址
-https://corey212.github.io/Prism-Documentation-zh/
+https://coreylyn.github.io/Prism-Documentation-zh/
